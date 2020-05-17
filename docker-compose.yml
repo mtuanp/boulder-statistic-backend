@@ -1,6 +1,7 @@
 version: '3'
 services:
   backend:
+    restart: always
     build: .
     volumes:
       - ./data:/data
