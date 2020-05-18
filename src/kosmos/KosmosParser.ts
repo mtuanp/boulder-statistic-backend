@@ -4,7 +4,7 @@ import { Parser } from "../api/Parser.ts";
 import { VisitorResult, VisitorStatus } from "../api/VisitorResult.ts";
 
 const BoulderadoIframeRegEx = new RegExp('iframe src="(.*)" name="Boulderado Clientcounter"')
-const FreeCounterRegEx = new RegExp('data-value="(\\d)" id="visitorcount-container"')
+const FreeCounterRegEx = new RegExp('data-value="(\\d+)" id="visitorcount-container"')
 const PartlyThreshold = 30
 const FullThreshold = 70
 
