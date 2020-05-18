@@ -1,26 +1,36 @@
-import { existsSync, readJsonSync, writeJsonSync, ensureFileSync } from "https://deno.land/std/fs/mod.ts";
+import {
+  existsSync,
+  readJsonSync,
+  writeJsonSync,
+  ensureFileSync,
+} from "https://deno.land/std/fs/mod.ts";
 
 import VisitorLiveEmitter from "../api/VisitorLiveEmitter.ts";
 import Parser from "../api/Parser.ts";
-import { VisitorStoreEnty } from "../api/VisitorStoreEntry.ts";
+import { VisitorStoreEntry } from "../api/VisitorStoreEntry.ts";
 
 export class VisitorLiveEmitterImpl implements VisitorLiveEmitter {
+  basePath: string;
+  parser: Parser;
 
-    filePath: string
-    parser: Parser
+  constructor(basePath: string, parser: Parser) {
+    this.parser = parser;
+    this.basePath = basePath;
+  }
 
-    constructor(filePath: string, parser: Parser) {
-        this.parser = parser
-        this.filePath = filePath
-    }
-
-    async emitActualVisitor(): Promise<void> {
-        const fileExists = existsSync(this.filePath)
-        const actualFileContent: VisitorStoreEnty[] = fileExists ? readJsonSync(this.filePath) as VisitorStoreEnty[] : []
-        const visitorStatus = await this.parser.parseActualVisitorStatus()
-        actualFileContent.push({ timestamp: new Date(), visitorStatus })
-        ensureFileSync(this.filePath)
-        writeJsonSync(this.filePath, actualFileContent)
-    }
-
+  async emitActualVisitor(): Promise<void> {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    const day = now.getDate();
+    const filePath = `${this.basePath}/${year}-${month}-${day}.json`;
+    const fileExists = existsSync(filePath);
+    const actualFileContent: VisitorStoreEntry[] = fileExists
+      ? (readJsonSync(filePath) as VisitorStoreEntry[])
+      : [];
+    const visitorStatus = await this.parser.parseActualVisitorStatus();
+    actualFileContent.push({ timestamp: new Date(), visitorStatus });
+    ensureFileSync(filePath);
+    writeJsonSync(filePath, actualFileContent);
+  }
 }
