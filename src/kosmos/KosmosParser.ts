@@ -5,8 +5,8 @@ import { VisitorResult, VisitorStatus } from "../api/VisitorResult.ts";
 
 const BoulderadoIframeRegEx = new RegExp('iframe src="(.*)" name="Boulderado Clientcounter"')
 const FreeCounterRegEx = new RegExp('data-value="(\\d+)" id="visitorcount-container"')
-const PartlyThreshold = 30
-const FullThreshold = 70
+const PartlyThreshold = 60
+const FullThreshold = 80
 
 /**
  * Kosmos parser, it search for the Boulderado iframe and extract the current visitor count.
