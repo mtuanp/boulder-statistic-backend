@@ -3,8 +3,11 @@ import "https://deno.land/x/dotenv/load.ts";
 
 import { VisitorLiveEmitterImpl } from "./live/VisitorLiveEmitter.ts";
 import { KosmosParser } from "./kosmos/KosmosParser.ts";
+import { logger } from "./log.ts";
 
 const EVERY_MINUTES = +(Deno.env.get("EVERY_MINUTES") || "5");
+
+logger.info("Bootstrapping app");
 
 const cron = new Cron();
 cron.start();
@@ -29,11 +32,9 @@ cron.add(Deno.env.get("KOSMOS_CRON") || "* * * * *", () => {
   ) {
     kosmosEmitter
       .emitActualVisitor()
-      .then(() => console.log(`${date.toString()}: Kosmos emitted`))
-      .catch((error) =>
-        console.log(`${date.toString()}: Kosmos error | ${error}`)
-      );
+      .then(() => logger.info("Kosmos status emitted"))
+      .catch((error) => logger.error("Kosmos error", error));
   }
 });
 
-console.table(cron.cronJobs);
+logger.info("App started");

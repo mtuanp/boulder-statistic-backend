@@ -114,3 +114,4 @@ temp/
 
 # Custom
 data/
+src/telegram/__tests__/TelegramBot.spec.ts
