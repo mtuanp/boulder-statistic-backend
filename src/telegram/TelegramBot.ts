@@ -41,7 +41,7 @@ function _onMessageUpdate(messageUpdates: MessageUpdates) {
     messageUpdates.result.forEach(
       (inMsg) => inMsg.message && MessageEvent.post(inMsg.message)
     );
-    let offset = messageUpdates.result.reduce((_, msg) => msg.update_id + 1, 0);
+    const offset = messageUpdates.result.reduce((_, msg) => msg.update_id + 1, 0);
     logger.debug("offset", offset);
     fetch(
       `${TELEGRAM_BASE_URL}${TELEGRAM_BOT_TOKEN}/getUpdates?timeout=${TELEGRAM_POLL_TIMEOUT}&offset=${offset}`
