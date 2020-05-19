@@ -14,7 +14,7 @@ cron.start();
 
 const kosmosEmitter = new VisitorLiveEmitterImpl(
   Deno.env.get("KOSMOS_LIVE_PATH") || "./kosmos.live.json",
-  new KosmosParser()
+  new KosmosParser(),
 );
 
 // kosmos cron

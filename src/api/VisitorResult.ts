@@ -1,13 +1,14 @@
 export type VisitorResult = {
-    
-    /** visitor count when available */
-    count: number | undefined
+  /** visitor count when available */
+  count: number | undefined;
 
-    status: VisitorStatus
-}
+  status: VisitorStatus;
+};
 
 export enum VisitorStatus {
-    FULL, PARTLY, FREE
+  FULL,
+  PARTLY,
+  FREE,
 }
 
-export default VisitorResult
+export default VisitorResult;

@@ -1,7 +1,7 @@
 import { VisitorResult } from "./VisitorResult.ts";
 
 export interface Parser {
-    parseActualVisitorStatus(): Promise<VisitorResult>
+  parseActualVisitorStatus(): Promise<VisitorResult>;
 }
 
-export default Parser
+export default Parser;

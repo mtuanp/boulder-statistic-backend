@@ -6,7 +6,7 @@ import { existsSync } from "https://deno.land/std/fs/mod.ts";
 Deno.test("testing emitter", () => {
   const emitter = new VisitorLiveEmitterImpl(
     "./tmp/testing",
-    new KosmosParser()
+    new KosmosParser(),
   );
   return emitter.emitActualVisitor().then(() => {
     assertEquals(existsSync("./tmp/testing"), true);
