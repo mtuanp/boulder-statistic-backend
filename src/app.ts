@@ -4,10 +4,15 @@ import "https://deno.land/x/dotenv/load.ts";
 import { VisitorLiveEmitterImpl } from "./live/VisitorLiveEmitter.ts";
 import { KosmosParser } from "./kosmos/KosmosParser.ts";
 import { logger } from "./log.ts";
+import { start, addMessageHandler } from "./telegram/TelegramBot.ts";
+import { handleTelegramMessage } from "./kosmos/TelegramMessageHandler.ts";
 
 const EVERY_MINUTES = +(Deno.env.get("EVERY_MINUTES") || "5");
 
 logger.info("Bootstrapping app");
+
+addMessageHandler(handleTelegramMessage);
+start();
 
 const cron = new Cron();
 cron.start();

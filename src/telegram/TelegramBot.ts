@@ -1,41 +1,44 @@
 import { Evt } from "https://deno.land/x/evt/mod.ts";
-
 import { logger } from "../log.ts";
-import { Message, MessageUpdates } from "./TelegramTypes.ts";
+import { IncomingMessage, IncomingMessageUpdates } from "./TelegramTypes.ts";
+import { genUrl } from "../api/Url.ts";
 
 const TELEGRAM_BASE_URL = Deno.env.get("TELEGRAM_BASE_URL") ||
   "https://api.telegram.org/bot";
-const TELEGRAM_BOT_TOKEN = Deno.env.get("TELEGRAM_BOT_TOKEN");
+const TELEGRAM_BOT_TOKEN = Deno.env.get("TELEGRAM_BOT_TOKEN") || "";
+const TELEGRAM_URL = TELEGRAM_BASE_URL + TELEGRAM_BOT_TOKEN;
 const TELEGRAM_POLL_TIMEOUT = +(Deno.env.get("TELEGRAM_POLL_TIMEOUT") || "120");
 
-const MessageUpdateEvent = new Evt<MessageUpdates>();
-const MessageEvent = new Evt<Message>();
+const MessageUpdateEvent = new Evt<IncomingMessageUpdates>();
+const MessageEvent = new Evt<IncomingMessage>();
 
 export function sendMessage(
-  chat_id: string,
-  msg: string,
-  reply_to_message_id?: string,
+  chat_id: number,
+  text: string,
+  reply_to_message_id?: number,
 ) {
   fetch(
-    `${TELEGRAM_BASE_URL}${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${chat_id}&text=${msg}${
-      reply_to_message_id ? `&reply_to_message_id=${reply_to_message_id}` : ""
-    }`,
+    genUrl(`${TELEGRAM_URL}/sendMessage`, {
+      chat_id,
+      text,
+      reply_to_message_id,
+    }),
   )
-    .then((res) => res.json() as Promise<Message>)
     .then(() => logger.info("Message send done"))
-    .catch((error) => logger.info("Message send error {error}", error));
+    .catch((error) => logger.info("Message send error", error));
 }
 
-export function addMessageHandler(handler: (msg: Message) => void) {
+export function addMessageHandler(handler: (msg: IncomingMessage) => void) {
   MessageEvent.attach(handler);
 }
 
 export function start() {
   MessageUpdateEvent.attach(_onMessageUpdate);
   MessageUpdateEvent.post({ ok: true, result: [] });
+  logger.info("Telegram Bot started");
 }
 
-function _onMessageUpdate(messageUpdates: MessageUpdates) {
+function _onMessageUpdate(messageUpdates: IncomingMessageUpdates) {
   if (messageUpdates.ok) {
     logger.debug("Message OK - start incoming message process");
     messageUpdates.result.forEach(
@@ -47,14 +50,17 @@ function _onMessageUpdate(messageUpdates: MessageUpdates) {
     );
     logger.debug("offset", offset);
     fetch(
-      `${TELEGRAM_BASE_URL}${TELEGRAM_BOT_TOKEN}/getUpdates?timeout=${TELEGRAM_POLL_TIMEOUT}&offset=${offset}`,
+      genUrl(`${TELEGRAM_URL}/getUpdates`, {
+        timeout: TELEGRAM_POLL_TIMEOUT,
+        offset,
+      }),
     )
-      .then((res) => res.json() as Promise<MessageUpdates>)
+      .then((res) => res.json() as Promise<IncomingMessageUpdates>)
       .then((messageUpdate) => {
         MessageUpdateEvent.post(messageUpdate);
       })
-      .then(() => logger.info("Message Update done"))
-      .catch((error) => logger.info("Message Update error", error));
+      .then(() => logger.info("Message update done"))
+      .catch((error) => logger.info("Message incoming update error", error));
   } else {
     logger.error("Message Error | " + messageUpdates);
   }

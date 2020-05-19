@@ -15,7 +15,7 @@ export type MessageEntity = {
   length: number;
 };
 
-export type Message = {
+export type IncomingMessage = {
   message_id: number;
   from: User;
   date: number;
@@ -26,10 +26,19 @@ export type Message = {
 
 export type IncomingUpdate = {
   update_id: number;
-  message?: Message;
+  message?: IncomingMessage;
 };
 
-export type MessageUpdates = {
+export type IncomingMessageUpdates = {
   ok: boolean;
   result: IncomingUpdate[];
+};
+
+export type OutcomingMessage = {
+  chat_id: number;
+  text: string;
+  parse_mode?: "Markdown" | "MarkdownV2" | "Markdown";
+  disable_web_page_preview?: boolean;
+  disable_notification?: boolean;
+  reply_to_message_id?: number;
 };
