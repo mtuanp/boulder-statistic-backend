@@ -24,8 +24,8 @@ export function sendMessage(
       reply_to_message_id,
     }),
   )
-    .then(() => logger.info("Message send done"))
-    .catch((error) => logger.info("Message send error", error));
+    .then(() => logger.debug("Message send done"))
+    .catch((error) => logger.error("Message send error", error));
 }
 
 export function addMessageHandler(handler: (msg: IncomingMessage) => void) {
@@ -59,8 +59,8 @@ function _onMessageUpdate(messageUpdates: IncomingMessageUpdates) {
       .then((messageUpdate) => {
         MessageUpdateEvent.post(messageUpdate);
       })
-      .then(() => logger.info("Message update done"))
-      .catch((error) => logger.info("Message incoming update error", error));
+      .then(() => logger.debug("Message update done"))
+      .catch((error) => logger.error("Message incoming update error", error));
   } else {
     logger.error("Message Error | " + messageUpdates);
   }

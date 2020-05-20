@@ -4,7 +4,7 @@ import { sendMessage } from "../telegram/TelegramBot.ts";
 import { KosmosParser } from "./KosmosParser.ts";
 
 export async function handleTelegramMessage(
-  incomingMessage: IncomingMessage
+  incomingMessage: IncomingMessage,
 ): Promise<void> {
   const { message_id, text, entities, chat } = incomingMessage;
   const { length, offset, type } = entities?.[0];
@@ -20,7 +20,7 @@ export async function handleTelegramMessage(
         `Kosmos actual visitors: ${
           (await new KosmosParser().parseActualVisitorStatus()).count
         }`,
-        message_id
+        message_id,
       );
     }
     logger.debug(parameter!);
