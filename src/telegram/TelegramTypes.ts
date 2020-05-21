@@ -21,7 +21,7 @@ export type IncomingMessage = {
   date: number;
   chat: Chat;
   text?: string;
-  entities: MessageEntity[];
+  entities?: MessageEntity[];
 };
 
 export type IncomingUpdate = {
@@ -34,7 +34,7 @@ export type IncomingMessageUpdates = {
   result: IncomingUpdate[];
 };
 
-export type OutcomingMessage = {
+export type OutgoingMessage = {
   chat_id: number;
   text: string;
   parse_mode?: "Markdown" | "MarkdownV2" | "Markdown";

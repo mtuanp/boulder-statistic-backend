@@ -1,6 +1,10 @@
 import { Evt } from "../deps.ts";
 import { logger } from "../log.ts";
-import { IncomingMessage, IncomingMessageUpdates } from "./TelegramTypes.ts";
+import {
+  IncomingMessage,
+  IncomingMessageUpdates,
+  OutgoingMessage,
+} from "./TelegramTypes.ts";
 import { genUrl } from "../core/UrlUtils.ts";
 
 const TELEGRAM_BASE_URL =
@@ -12,18 +16,8 @@ const TELEGRAM_POLL_TIMEOUT = +(Deno.env.get("TELEGRAM_POLL_TIMEOUT") || "120");
 const MessageUpdateEvent = new Evt<IncomingMessageUpdates>();
 const MessageEvent = new Evt<IncomingMessage>();
 
-export function sendMessage(
-  chat_id: number,
-  text: string,
-  reply_to_message_id?: number,
-) {
-  fetch(
-    genUrl(`${TELEGRAM_URL}/sendMessage`, {
-      chat_id,
-      text,
-      reply_to_message_id,
-    }),
-  )
+export function sendMessage(outgoingMessage: OutgoingMessage) {
+  fetch(genUrl(`${TELEGRAM_URL}/sendMessage`, outgoingMessage))
     .then(() => logger.debug("Message send done"))
     .catch((error) => logger.error("Message send error", error));
 }
@@ -42,7 +36,8 @@ function _onMessageUpdate(messageUpdates: IncomingMessageUpdates) {
   if (messageUpdates.ok) {
     logger.debug("Message OK - start incoming message process");
     messageUpdates.result.forEach(
-      (inMsg) => inMsg.message && MessageEvent.post(inMsg.message),
+      (inMsg) =>
+        inMsg.message && MessageEvent.postAsyncOnceHandled(inMsg.message),
     );
     const offset = messageUpdates.result.reduce(
       (_, msg) => msg.update_id + 1,

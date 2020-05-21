@@ -1,23 +1,29 @@
 import { Cron } from "./deps.ts";
 
-import { VisitorLiveEmitterImpl } from "./live/VisitorLiveEmitter.ts";
+import { KosmosVisitorLiveEmitter } from "./kosmos/KosmosVisitorLiveEmitter.ts";
 import { KosmosParser } from "./kosmos/KosmosParser.ts";
 import { logger } from "./log.ts";
 import { start, addMessageHandler } from "./telegram/TelegramBot.ts";
-import { handleTelegramMessage } from "./kosmos/TelegramMessageHandler.ts";
+import { handleKosmosTelegramMessage } from "./kosmos/KosmosTelegramMessageHandler.ts";
+import { SQLiteDatastore as Datastore } from "./persistence/SQLiteDatastore.ts";
+import { VisitorStatusEvent } from "./core/Events.ts";
 
 const EVERY_MINUTES = +(Deno.env.get("EVERY_MINUTES") || "5");
 
 logger.info("Bootstrapping app");
 
-addMessageHandler(handleTelegramMessage);
+const db = new Datastore();
+await db.init();
+
+addMessageHandler((msg) => handleKosmosTelegramMessage(db, msg));
 start();
 
 const cron = new Cron();
 cron.start();
 
-const kosmosEmitter = new VisitorLiveEmitterImpl(
-  Deno.env.get("KOSMOS_LIVE_PATH") || "./kosmos.live.json",
+const kosmosEmitter = new KosmosVisitorLiveEmitter(
+  db,
+  VisitorStatusEvent,
   new KosmosParser(),
 );
 
@@ -42,3 +48,10 @@ cron.add(Deno.env.get("KOSMOS_CRON") || "* * * * *", () => {
 });
 
 logger.info("App started");
+
+await Deno.signal(Deno.Signal.SIGINT);
+logger.info("Shutdown the App");
+await db.saveAndClose();
+logger.info("Database saved!");
+logger.info("Bye Bye");
+Deno.exit(0);
