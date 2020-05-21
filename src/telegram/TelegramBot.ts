@@ -1,7 +1,7 @@
 import { Evt } from "https://deno.land/x/evt/mod.ts";
 import { logger } from "../log.ts";
 import { IncomingMessage, IncomingMessageUpdates } from "./TelegramTypes.ts";
-import { genUrl } from "../core/Url.ts";
+import { genUrl } from "../core/UrlUtils.ts";
 
 const TELEGRAM_BASE_URL =
   Deno.env.get("TELEGRAM_BASE_URL") || "https://api.telegram.org/bot";

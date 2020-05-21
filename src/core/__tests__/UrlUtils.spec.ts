@@ -1,4 +1,4 @@
-import { genUrl } from "../URL.ts";
+import { genUrl } from "../UrlUtils.ts";
 import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
 
 Deno.test("testing url with parameters", () => {
