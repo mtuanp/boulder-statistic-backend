@@ -1,7 +1,7 @@
 import { Html5Entities } from "https://deno.land/x/html_entities@v1.0/mod.js";
 
-import { Parser } from "../api/Parser.ts";
-import { VisitorResult, VisitorStatus } from "../api/VisitorResult.ts";
+import { Parser } from "../core/Parser.ts";
+import { VisitorResult, VisitorStatus } from "../core/VisitorResult.ts";
 
 const BoulderadoIframeRegEx = new RegExp(
   'iframe src="(.*)" name="Boulderado Clientcounter"',
@@ -41,14 +41,15 @@ export class KosmosParser implements Parser {
         const visitorCount = +freeCounterGroup[1];
         return {
           count: visitorCount,
-          status: visitorCount >= 0 && visitorCount < PartlyThreshold
-            ? VisitorStatus.FREE
-            : visitorCount >= FullThreshold
-            ? VisitorStatus.FULL
-            : VisitorStatus.PARTLY,
+          status:
+            visitorCount >= 0 && visitorCount < PartlyThreshold
+              ? VisitorStatus.FREE
+              : visitorCount >= FullThreshold
+              ? VisitorStatus.FULL
+              : VisitorStatus.PARTLY,
         };
       }
     }
-    throw new Error("Parsing not successfull");
+    throw new Error("Parsing not successfully");
   }
 }

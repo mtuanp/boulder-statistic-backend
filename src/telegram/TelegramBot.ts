@@ -1,10 +1,10 @@
 import { Evt } from "https://deno.land/x/evt/mod.ts";
 import { logger } from "../log.ts";
 import { IncomingMessage, IncomingMessageUpdates } from "./TelegramTypes.ts";
-import { genUrl } from "../api/Url.ts";
+import { genUrl } from "../core/Url.ts";
 
-const TELEGRAM_BASE_URL = Deno.env.get("TELEGRAM_BASE_URL") ||
-  "https://api.telegram.org/bot";
+const TELEGRAM_BASE_URL =
+  Deno.env.get("TELEGRAM_BASE_URL") || "https://api.telegram.org/bot";
 const TELEGRAM_BOT_TOKEN = Deno.env.get("TELEGRAM_BOT_TOKEN") || "";
 const TELEGRAM_URL = TELEGRAM_BASE_URL + TELEGRAM_BOT_TOKEN;
 const TELEGRAM_POLL_TIMEOUT = +(Deno.env.get("TELEGRAM_POLL_TIMEOUT") || "120");

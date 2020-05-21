@@ -1,6 +1,6 @@
 import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
 import { KosmosParser } from "../KosmosParser.ts";
-import { VisitorStatus } from "../../api/VisitorResult.ts";
+import { VisitorStatus } from "../../core/VisitorResult.ts";
 
 const mockFetch = async (url: string) => {
   if (url === "http://kosmos-bouldern.de") {

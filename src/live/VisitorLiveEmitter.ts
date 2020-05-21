@@ -5,9 +5,9 @@ import {
   ensureFileSync,
 } from "https://deno.land/std/fs/mod.ts";
 
-import VisitorLiveEmitter from "../api/VisitorLiveEmitter.ts";
-import Parser from "../api/Parser.ts";
-import { VisitorStoreEntry } from "../api/VisitorStoreEntry.ts";
+import VisitorLiveEmitter from "../core/VisitorLiveEmitter.ts";
+import Parser from "../core/Parser.ts";
+import { VisitorStoreEntry } from "../core/VisitorStoreEntry.ts";
 
 export class VisitorLiveEmitterImpl implements VisitorLiveEmitter {
   basePath: string;
