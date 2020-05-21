@@ -1,4 +1,4 @@
-import { Evt } from "https://deno.land/x/evt/mod.ts";
+import { Evt } from "../deps.ts";
 
 import VisitorResult from "./VisitorResult.ts";
 

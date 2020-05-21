@@ -1,6 +1,6 @@
-import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
-import { KosmosParser } from "../KosmosParser.ts";
 import { VisitorStatus } from "../../core/VisitorResult.ts";
+import { assertEquals } from "../../deps.ts";
+import { KosmosParser } from "../KosmosParser.ts";
 
 const mockFetch = async (url: string) => {
   if (url === "http://kosmos-bouldern.de") {
@@ -18,6 +18,6 @@ Deno.test("Kosmos parser", () => {
   const parser = new KosmosParser(mockFetch);
   const actualResult = parser.parseActualVisitorStatus();
   return actualResult.then((result) =>
-    assertEquals(result, { count: 2, status: VisitorStatus.FREE })
+    assertEquals(result, { count: 2, status: VisitorStatus.FREE }),
   );
 });

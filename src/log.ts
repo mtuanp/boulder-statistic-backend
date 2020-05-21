@@ -1,5 +1,5 @@
-import * as log from "https://deno.land/std/log/mod.ts";
-import { LogRecord } from "https://deno.land/std/log/logger.ts";
+import { log } from "./deps.ts";
+import { LogRecord } from "./deps.ts";
 
 const formatter = (logRecord: LogRecord) => {
   let msg = `${logRecord.datetime} - ${logRecord.levelName} - ${logRecord.msg}`;

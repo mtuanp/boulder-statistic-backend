@@ -1,4 +1,4 @@
-import { Evt } from "https://deno.land/x/evt/mod.ts";
+import { Evt } from "../deps.ts";
 import { logger } from "../log.ts";
 import { IncomingMessage, IncomingMessageUpdates } from "./TelegramTypes.ts";
 import { genUrl } from "../core/UrlUtils.ts";

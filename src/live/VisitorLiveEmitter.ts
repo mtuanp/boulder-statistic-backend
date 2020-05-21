@@ -1,9 +1,5 @@
-import {
-  existsSync,
-  readJsonSync,
-  writeJsonSync,
-  ensureFileSync,
-} from "https://deno.land/std/fs/mod.ts";
+import { fs } from "../deps.ts";
+const { existsSync, readJsonSync, writeJsonSync, ensureFileSync } = fs;
 
 import VisitorLiveEmitter from "../core/VisitorLiveEmitter.ts";
 import Parser from "../core/Parser.ts";

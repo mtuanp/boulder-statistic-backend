@@ -1,5 +1,5 @@
 import { genUrl } from "../UrlUtils.ts";
-import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
+import { assertEquals } from "../../deps.ts";
 
 Deno.test("testing url with parameters", () => {
   const url = genUrl("base", { foo: "bar", count: 5, no: undefined });

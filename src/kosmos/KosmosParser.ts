@@ -1,4 +1,4 @@
-import { Html5Entities } from "https://deno.land/x/html_entities@v1.0/mod.js";
+import { Html5Entities } from "../deps.ts";
 
 import { Parser } from "../core/Parser.ts";
 import { VisitorResult, VisitorStatus } from "../core/VisitorResult.ts";

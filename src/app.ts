@@ -1,5 +1,4 @@
-import { Cron } from "https://deno.land/x/cron/cron.ts";
-import "https://deno.land/x/dotenv/load.ts";
+import { Cron } from "./deps.ts";
 
 import { VisitorLiveEmitterImpl } from "./live/VisitorLiveEmitter.ts";
 import { KosmosParser } from "./kosmos/KosmosParser.ts";
