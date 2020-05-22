@@ -1,4 +1,4 @@
 import { Evt } from "../deps.ts";
-import { VisitorStoreEntry } from "./VisitorStoreEntry.ts";
+import { VisitorEventData } from "./VisitorEventData.ts";
 
-export const VisitorStatusEvent = new Evt<VisitorStoreEntry>();
+export const VisitorStatusEvent = new Evt<VisitorEventData>();

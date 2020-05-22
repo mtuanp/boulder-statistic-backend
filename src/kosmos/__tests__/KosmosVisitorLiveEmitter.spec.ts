@@ -8,25 +8,31 @@ import { Evt } from "../../deps.ts";
 import { VisitorStoreEntry } from "../../core/VisitorStoreEntry.ts";
 import Parser from "../../core/Parser.ts";
 import { VisitorStatus } from "../../core/VisitorResult.ts";
+import { Gym } from "../../core/Gym.ts";
+import { VisitorEventData } from "../../core/VisitorEventData.ts";
 
 Deno.test("testing emitter", () => {
   const expectedStoreEntry = {
+    visitorStatus: { count: 12, status: 2 },
+  };
+  const expectedEventData = {
     gym: 0,
     visitorStatus: { count: 12, status: 2 },
   };
   const db: Datastore = {
-    insertVisitor: async (entry) => {
+    insertVisitor: async (gym, entry) => {
+      assertEquals(gym, Gym.KOSMOS);
       delete entry.timestamp;
       assertEquals(entry, expectedStoreEntry);
     },
   } as Datastore;
-  const event: Evt<VisitorStoreEntry> = {
+  const event: Evt<VisitorEventData> = {
     postAsyncOnceHandled: (entry) => {
       delete entry.timestamp;
-      assertEquals(entry, expectedStoreEntry);
+      assertEquals(entry, expectedEventData);
       return 1;
     },
-  } as Evt<VisitorStoreEntry>;
+  } as Evt<VisitorEventData>;
   const parser: Parser = {
     parseActualVisitorStatus: async () => ({
       count: 12,
