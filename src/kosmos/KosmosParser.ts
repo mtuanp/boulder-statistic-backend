@@ -9,6 +9,9 @@ const BoulderadoIframeRegEx = new RegExp(
 const FreeCounterRegEx = new RegExp(
   'data-value="(\\d+)" id="visitorcount-container"',
 );
+const KOSMOS_HOMEPAGE = "http://kosmos-bouldern.de";
+const KOSMOS_BOULDERADO_FALLBACK_URL =
+  Deno.env.get("KOSMOS_BOULDERADO_FALLBACK_URL") || "";
 const AlmostFullThreshold = 60;
 const FullThreshold = 80;
 
@@ -29,23 +32,28 @@ export class KosmosParser implements Parser {
   }
 
   async parseActualVisitorStatus(): Promise<VisitorResult> {
-    const kosmosIndexHtmlText = await this.txtFetcher(
-      "http://kosmos-bouldern.de",
-    );
+    const kosmosIndexHtmlText = await this.txtFetcher(KOSMOS_HOMEPAGE);
     const iframeGroups = BoulderadoIframeRegEx.exec(kosmosIndexHtmlText);
-    if (iframeGroups && iframeGroups.length === 2) {
-      const decodedUrl = Html5Entities.decode(iframeGroups[1]);
+    if (
+      (iframeGroups && iframeGroups.length === 2) ||
+      KOSMOS_BOULDERADO_FALLBACK_URL
+    ) {
+      const decodedUrl =
+        iframeGroups?.length === 2
+          ? Html5Entities.decode(iframeGroups[1])
+          : KOSMOS_BOULDERADO_FALLBACK_URL;
       const counterHtmlText = await this.txtFetcher(decodedUrl);
       const freeCounterGroup = FreeCounterRegEx.exec(counterHtmlText);
       if (freeCounterGroup && freeCounterGroup.length === 2) {
         const visitorCount = +freeCounterGroup[1];
         return {
           count: visitorCount,
-          status: visitorCount >= 0 && visitorCount < AlmostFullThreshold
-            ? VisitorStatus.FREE
-            : visitorCount >= FullThreshold
-            ? VisitorStatus.FULL
-            : VisitorStatus.ALMOST_FULL,
+          status:
+            visitorCount >= 0 && visitorCount < AlmostFullThreshold
+              ? VisitorStatus.FREE
+              : visitorCount >= FullThreshold
+              ? VisitorStatus.FULL
+              : VisitorStatus.ALMOST_FULL,
         };
       }
     }
