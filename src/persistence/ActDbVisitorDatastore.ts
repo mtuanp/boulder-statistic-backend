@@ -2,11 +2,11 @@ import { actdb, fs } from "../deps.ts";
 import { logger } from "../log.ts";
 import { VisitorStoreEntry } from "../core/VisitorStoreEntry.ts";
 import { Gym } from "../core/Gym.ts";
-import { Datastore } from "../core/Datastore.ts";
+import { VisitorDatastore } from "../core/VisitorDatastore.ts";
 import { DailyFileAdapter } from "./DailyFileAdapter.ts";
 import { VisitorStatus } from "../core/VisitorResult.ts";
 
-export class ActDbDatastore implements Datastore {
+export class ActDbVisitorDatastore implements VisitorDatastore {
   kosmosDataPath: string;
   visitorStore!: actdb.Store<VisitorStoreEntry>;
   constructor(

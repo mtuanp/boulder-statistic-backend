@@ -1,4 +1,4 @@
-import { Datastore } from "../core/Datastore.ts";
+import { VisitorDatastore } from "../core/VisitorDatastore.ts";
 import { Gym } from "../core/Gym.ts";
 import { statusEnumToString, extractBotCommand } from "../core/Utils.ts";
 import { logger } from "../log.ts";
@@ -6,7 +6,7 @@ import { sendMessage } from "../telegram/TelegramBot.ts";
 import { IncomingMessage } from "../telegram/TelegramTypes.ts";
 
 export async function handleKosmosTelegramMessage(
-  datastore: Datastore,
+  datastore: VisitorDatastore,
   incomingMessage: IncomingMessage,
 ): Promise<void> {
   const { chat, type, botCommand } = extractBotCommand(incomingMessage);

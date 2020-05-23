@@ -1,4 +1,4 @@
-import { Datastore } from "../../core/Datastore.ts";
+import { VisitorDatastore } from "../../core/VisitorDatastore.ts";
 import { Gym } from "../../core/Gym.ts";
 import Parser from "../../core/Parser.ts";
 import { VisitorEventData } from "../../core/VisitorEventData.ts";
@@ -14,13 +14,13 @@ Deno.test("testing emitter", () => {
     gym: 0,
     visitorStatus: { count: 12, status: 2 },
   };
-  const db: Datastore = {
+  const db: VisitorDatastore = {
     insertVisitor: async (gym, entry) => {
       assertEquals(gym, Gym.KOSMOS);
       delete entry.timestamp;
       assertEquals(entry, expectedStoreEntry);
     },
-  } as Datastore;
+  } as VisitorDatastore;
   const event: Evt<VisitorEventData> = {
     postAsyncOnceHandled: (entry) => {
       delete entry.timestamp;

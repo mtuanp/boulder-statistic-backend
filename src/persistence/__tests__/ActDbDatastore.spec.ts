@@ -1,4 +1,4 @@
-import { ActDbDatastore } from "../ActDbDatastore.ts";
+import { ActDbVisitorDatastore } from "../ActDbVisitorDatastore.ts";
 import { assertEquals } from "../../deps.ts";
 import { fs } from "../../deps.ts";
 import { Gym } from "../../core/Gym.ts";
@@ -8,7 +8,7 @@ import { delay } from "../../core/Utils.ts";
 Deno.test("actdb - testing datastore init", async () => {
   fs.ensureDirSync("tmp/actDatabase");
   fs.emptyDirSync("tmp/actDatabase");
-  const db = new ActDbDatastore("tmp/actDatabase");
+  const db = new ActDbVisitorDatastore("tmp/actDatabase");
   await db.init();
   await db.insertVisitor(Gym.KOSMOS, {
     timestamp: new Date(),
@@ -23,7 +23,7 @@ Deno.test("actdb - testing datastore init", async () => {
 Deno.test("actdb - testing datastore read", async () => {
   fs.ensureDirSync("tmp/actDatabase2");
   fs.emptyDirSync("tmp/actDatabase2");
-  const db = new ActDbDatastore("tmp/actDatabase2");
+  const db = new ActDbVisitorDatastore("tmp/actDatabase2");
   await db.init();
   const lastStatus = await db.getLatestVisitorStatus(Gym.KOSMOS);
   delete lastStatus.timestamp;
@@ -36,7 +36,7 @@ Deno.test("actdb - testing datastore read", async () => {
 Deno.test("actdb - testing datastore insert and select", async () => {
   fs.ensureDirSync("tmp/actDatabase3");
   fs.emptyDirSync("tmp/actDatabase3");
-  const db = new ActDbDatastore("tmp/actDatabase3");
+  const db = new ActDbVisitorDatastore("tmp/actDatabase3");
   await db.init();
 
   await db.insertVisitor(Gym.KOSMOS, {

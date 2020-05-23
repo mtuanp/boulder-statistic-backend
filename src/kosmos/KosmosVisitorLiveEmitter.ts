@@ -1,4 +1,4 @@
-import { Datastore } from "../core/Datastore.ts";
+import { VisitorDatastore } from "../core/VisitorDatastore.ts";
 import { Gym } from "../core/Gym.ts";
 import Parser from "../core/Parser.ts";
 import { VisitorEventData } from "../core/VisitorEventData.ts";
@@ -6,12 +6,12 @@ import VisitorLiveEmitter from "../core/VisitorLiveEmitter.ts";
 import { Evt } from "../deps.ts";
 
 export class KosmosVisitorLiveEmitter implements VisitorLiveEmitter {
-  datastore: Datastore;
+  datastore: VisitorDatastore;
   parser: Parser;
   visitorEvent: Evt<VisitorEventData>;
 
   constructor(
-    datastore: Datastore,
+    datastore: VisitorDatastore,
     visitorEvent: Evt<VisitorEventData>,
     parser: Parser,
   ) {
