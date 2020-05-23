@@ -8,11 +8,8 @@ export interface AppDatastore {
     chat_id: number,
     gym: Gym,
   ): Promise<UserNotificationSetting | undefined>;
-  addUserNotification(
-    chat_id: number,
-    gym: Gym,
-    threshold: VisitorStatus,
+  addOrUpdateUserNotification(
+    userNotConfig: UserNotificationSetting,
   ): Promise<void>;
-  updateUserNotification(userNotConfig: UserNotificationSetting): Promise<void>;
   removeUserNotification(chat_id: number, gym: Gym): Promise<void>;
 }

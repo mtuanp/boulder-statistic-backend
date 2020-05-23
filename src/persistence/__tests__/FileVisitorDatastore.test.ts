@@ -6,25 +6,25 @@ import { VisitorStatus } from "../../core/VisitorResult.ts";
 import { delay, buildDateString } from "../../core/Utils.ts";
 
 Deno.test("FileVisitorDatastore - testing datastore init", async () => {
-  fs.ensureDirSync("tmp/actDatabase");
-  fs.emptyDirSync("tmp/actDatabase");
-  const db = new FileVisitorDatastore("tmp/actDatabase");
+  fs.ensureDirSync("tmp/visitDatabase");
+  fs.emptyDirSync("tmp/visitDatabase");
+  const db = new FileVisitorDatastore("tmp/visitDatabase");
   await db.init();
   await db.insertVisitor(Gym.KOSMOS, {
     timestamp: new Date(),
     visitorStatus: { count: 10, status: VisitorStatus.FREE },
   });
   await delay(0); // fixed false positive like https://github.com/denoland/deno/pull/4602
-  for (const dirEntry of Deno.readDirSync("tmp/actDatabase/")) {
+  for (const dirEntry of Deno.readDirSync("tmp/visitDatabase/")) {
     assertEquals(dirEntry.name.endsWith(".json"), true);
   }
 });
 
 Deno.test("FileVisitorDatastore - testing datastore read", async () => {
-  fs.ensureDirSync("tmp/actDatabase2");
-  fs.emptyDirSync("tmp/actDatabase2");
+  fs.ensureDirSync("tmp/visitDatabase2");
+  fs.emptyDirSync("tmp/visitDatabase2");
 
-  const db = new FileVisitorDatastore("tmp/actDatabase2");
+  const db = new FileVisitorDatastore("tmp/visitDatabase2");
   await db.init();
   const lastStatus = await db.getLatestVisitorStatus(Gym.KOSMOS);
   delete lastStatus.timestamp;
@@ -37,17 +37,17 @@ Deno.test("FileVisitorDatastore - testing datastore read", async () => {
 Deno.test(
   "FileVisitorDatastore - testing datastore read existing",
   async () => {
-    fs.ensureDirSync("tmp/actDatabase2");
-    fs.emptyDirSync("tmp/actDatabase2");
+    fs.ensureDirSync("tmp/visitDatabase2");
+    fs.emptyDirSync("tmp/visitDatabase2");
     const now = new Date();
     const dateString = buildDateString(now);
-    const filePath = `tmp/actDatabase2/${dateString}.json`;
+    const filePath = `tmp/visitDatabase2/${dateString}.json`;
     const expectedStatusEntry = {
       timestamp: now,
       visitorStatus: { count: 0, status: VisitorStatus.UNKNOWN },
     };
     fs.writeJsonSync(filePath, [expectedStatusEntry]);
-    const db = new FileVisitorDatastore("tmp/actDatabase2");
+    const db = new FileVisitorDatastore("tmp/visitDatabase2");
     await db.init();
     const lastStatus = await db.getLatestVisitorStatus(Gym.KOSMOS);
     await delay(0);
@@ -58,9 +58,9 @@ Deno.test(
 Deno.test(
   "FileVisitorDatastore - testing datastore insert and select",
   async () => {
-    fs.ensureDirSync("tmp/actDatabase3");
-    fs.emptyDirSync("tmp/actDatabase3");
-    const db = new FileVisitorDatastore("tmp/actDatabase3");
+    fs.ensureDirSync("tmp/visitDatabase3");
+    fs.emptyDirSync("tmp/visitDatabase3");
+    const db = new FileVisitorDatastore("tmp/visitDatabase3");
     await db.init();
 
     await db.insertVisitor(Gym.KOSMOS, {
