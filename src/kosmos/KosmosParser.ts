@@ -9,7 +9,7 @@ const BoulderadoIframeRegEx = new RegExp(
 const FreeCounterRegEx = new RegExp(
   'data-value="(\\d+)" id="visitorcount-container"',
 );
-const PartlyThreshold = 60;
+const AlmostFullThreshold = 60;
 const FullThreshold = 80;
 
 /**
@@ -42,11 +42,11 @@ export class KosmosParser implements Parser {
         return {
           count: visitorCount,
           status:
-            visitorCount >= 0 && visitorCount < PartlyThreshold
+            visitorCount >= 0 && visitorCount < AlmostFullThreshold
               ? VisitorStatus.FREE
               : visitorCount >= FullThreshold
               ? VisitorStatus.FULL
-              : VisitorStatus.PARTLY,
+              : VisitorStatus.ALMOST_FULL,
         };
       }
     }
