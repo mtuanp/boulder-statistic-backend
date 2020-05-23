@@ -7,7 +7,7 @@ import { KosmosParser } from "./kosmos/KosmosParser.ts";
 import { logger } from "./log.ts";
 import { start, addMessageHandler } from "./telegram/TelegramBot.ts";
 import { handleKosmosTelegramMessage } from "./kosmos/KosmosTelegramMessageHandler.ts";
-import { ActDbVisitorDatastore as VisitorDatastore } from "./persistence/ActDbVisitorDatastore.ts";
+import { FileVisitorDatastore as VisitorDatastore } from "./persistence/FileVisitorDatastore.ts";
 import { VisitorStatusEvent } from "./core/Events.ts";
 import { handleDefaultTelegramMessage } from "./telegram/TelegramDefaultMessageHandler.ts";
 

@@ -10,9 +10,9 @@ export function delay(n: number): Promise<void> {
 export function genUrl(url: string, parameters?: any): string {
   const requestParameters = parameters
     ? Object.keys(parameters)
-      .filter((param) => parameters[param] !== undefined)
-      .map((param) => `${param}=${parameters[param]}`)
-      .join("&")
+        .filter((param) => parameters[param] !== undefined)
+        .map((param) => `${param}=${parameters[param]}`)
+        .join("&")
     : "";
   return `${url}${requestParameters.length > 0 ? "?" + requestParameters : ""}`;
 }
@@ -34,9 +34,14 @@ export function extractBotCommand(
   incomingMessage: IncomingMessage,
 ): { chat: Chat; type: "bot_command" | string; botCommand: string } {
   const { text, entities, chat } = incomingMessage;
-  const { length, offset, type } = entities && entities.length > 0
-    ? entities[0]
-    : { length: 0, offset: 0, type: "" };
+  const { length, offset, type } =
+    entities && entities.length > 0
+      ? entities[0]
+      : { length: 0, offset: 0, type: "" };
   const botCommand = text?.substr(offset, length).toLowerCase() || "";
   return { chat, type, botCommand };
+}
+
+export function buildDateString(date: Date) {
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
