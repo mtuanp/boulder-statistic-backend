@@ -5,7 +5,7 @@ const formatter = (logRecord: LogRecord) => {
   let msg = `${logRecord.datetime} - ${logRecord.levelName} - ${logRecord.msg}`;
 
   logRecord.args.forEach((arg, index) => {
-    msg += `, arg${index}: ${arg}`;
+    msg += `, arg${index}: ${JSON.stringify(arg)}`;
   });
 
   return msg;
