@@ -5,5 +5,4 @@ export interface Datastore {
   init(): Promise<void>;
   insertVisitor(gym: Gym, entry: VisitorStoreEntry): Promise<void>;
   getLatestVisitorStatus(gym: Gym): Promise<VisitorStoreEntry>;
-  saveAndClose(): Promise<void>;
 }

@@ -1,13 +1,14 @@
-import { actdb } from "../deps.ts";
+import { actdb, fs } from "../deps.ts";
 import { logger } from "../log.ts";
 import { VisitorStoreEntry } from "../core/VisitorStoreEntry.ts";
 import { Gym } from "../core/Gym.ts";
 import { Datastore } from "../core/Datastore.ts";
 import { DailyFileAdapter } from "./DailyFileAdapter.ts";
+import { VisitorStatus } from "../core/VisitorResult.ts";
 
 export class ActDbDatastore implements Datastore {
   kosmosDataPath: string;
-  visitors!: actdb.Store<VisitorStoreEntry>;
+  visitorStore!: actdb.Store<VisitorStoreEntry>;
   constructor(
     kosmosDataPath: string = Deno.env.get("KOSMOS_DATA_PATH") || "data/kosmos",
   ) {
@@ -15,17 +16,27 @@ export class ActDbDatastore implements Datastore {
   }
 
   async init() {
+    fs.ensureDirSync(this.kosmosDataPath);
     const db = new actdb.Act(new DailyFileAdapter(this.kosmosDataPath));
-    this.visitors! = db.createStore<VisitorStoreEntry>("visitors");
+    this.visitorStore! = db.createStore<VisitorStoreEntry>("visitors");
+    logger.debug("Datastore is ready");
   }
 
   async insertVisitor(gym: Gym, entry: VisitorStoreEntry) {
-    return this.visitors.insert([entry]);
+    logger.debug("Datastore insert entry", gym, entry);
+    return this.visitorStore.insert([entry]);
   }
 
   async getLatestVisitorStatus(gym: Gym): Promise<VisitorStoreEntry> {
-    return {} as VisitorStoreEntry;
+    const visitors = await this.visitorStore.read();
+    return visitors.length > 0
+      ? {
+          ...visitors[visitors.length - 1],
+          timestamp: new Date(visitors[visitors.length - 1].timestamp),
+        }
+      : {
+          timestamp: new Date(),
+          visitorStatus: { count: 0, status: VisitorStatus.UNKNOWN },
+        };
   }
-
-  async saveAndClose() {}
 }

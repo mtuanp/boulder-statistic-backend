@@ -14,36 +14,48 @@ Deno.test("actdb - testing datastore init", async () => {
     timestamp: new Date(),
     visitorStatus: { count: 10, status: VisitorStatus.FREE },
   });
-  await delay(0);
-  assertEquals(fs.existsSync("tmp/actDatabase/*.json"), true);
+  await delay(0); // fixed false positive like https://github.com/denoland/deno/pull/4602
+  for (const dirEntry of Deno.readDirSync("tmp/actDatabase/")) {
+    assertEquals(dirEntry.name.endsWith("_actdb.json"), true);
+  }
 });
 
-// Deno.test("actdb - testing datastore insert and select", async () => {
-//   fs.ensureDirSync("tmp/actDatabase2");
-//   fs.emptyDirSync("tmp/actDatabase2");
-//   const db = new ActDbDatastore("tmp/actDatabase2b");
-//   await db.init();
+Deno.test("actdb - testing datastore read", async () => {
+  fs.ensureDirSync("tmp/actDatabase2");
+  fs.emptyDirSync("tmp/actDatabase2");
+  const db = new ActDbDatastore("tmp/actDatabase2");
+  await db.init();
+  const lastStatus = await db.getLatestVisitorStatus(Gym.KOSMOS);
+  delete lastStatus.timestamp;
+  await delay(0);
+  assertEquals(lastStatus, {
+    visitorStatus: { count: 0, status: VisitorStatus.UNKNOWN },
+  });
+});
 
-//   await db.insertVisitor({
-//     gym: Gym.KOSMOS,
-//     timestamp: new Date(2020, 1, 1, 10, 1, 30),
-//     visitorStatus: { count: 10, status: VisitorStatus.FREE },
-//   });
-//   await db.insertVisitor({
-//     gym: Gym.KOSMOS,
-//     timestamp: new Date(2020, 1, 1, 10, 3, 30),
-//     visitorStatus: { count: 11, status: VisitorStatus.FREE },
-//   });
-//   await db.insertVisitor({
-//     gym: Gym.KOSMOS,
-//     timestamp: new Date(2020, 1, 1, 10, 2, 30),
-//     visitorStatus: { count: 12, status: VisitorStatus.FREE },
-//   });
-//   const latestVisitorStatus = await db.getLatestVisitorStatus(Gym.KOSMOS);
-//   assertEquals(latestVisitorStatus.timestamp, new Date(2020, 1, 1, 10, 3, 30));
-//   assertEquals(latestVisitorStatus.visitorStatus, {
-//     count: 11,
-//     status: VisitorStatus.FREE,
-//   });
-//   await db.saveAndClose();
-// });
+Deno.test("actdb - testing datastore insert and select", async () => {
+  fs.ensureDirSync("tmp/actDatabase3");
+  fs.emptyDirSync("tmp/actDatabase3");
+  const db = new ActDbDatastore("tmp/actDatabase3");
+  await db.init();
+
+  await db.insertVisitor(Gym.KOSMOS, {
+    timestamp: new Date(2020, 1, 1, 10, 1, 30),
+    visitorStatus: { count: 10, status: VisitorStatus.FREE },
+  });
+  await db.insertVisitor(Gym.KOSMOS, {
+    timestamp: new Date(2020, 1, 1, 10, 2, 30),
+    visitorStatus: { count: 12, status: VisitorStatus.FREE },
+  });
+  await db.insertVisitor(Gym.KOSMOS, {
+    timestamp: new Date(2020, 1, 1, 10, 3, 30),
+    visitorStatus: { count: 11, status: VisitorStatus.FREE },
+  });
+  const latestVisitorStatus = await db.getLatestVisitorStatus(Gym.KOSMOS);
+  await delay(0);
+  assertEquals(latestVisitorStatus.timestamp, new Date(2020, 1, 1, 10, 3, 30));
+  assertEquals(latestVisitorStatus.visitorStatus, {
+    count: 11,
+    status: VisitorStatus.FREE,
+  });
+});

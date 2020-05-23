@@ -5,7 +5,7 @@ import { KosmosParser } from "./kosmos/KosmosParser.ts";
 import { logger } from "./log.ts";
 import { start, addMessageHandler } from "./telegram/TelegramBot.ts";
 import { handleKosmosTelegramMessage } from "./kosmos/KosmosTelegramMessageHandler.ts";
-import { SQLiteDatastore as Datastore } from "./persistence/SQLiteDatastore.ts";
+import { ActDbDatastore as Datastore } from "./persistence/ActDbDatastore.ts";
 import { VisitorStatusEvent } from "./core/Events.ts";
 
 const EVERY_MINUTES = +(Deno.env.get("EVERY_MINUTES") || "5");
@@ -51,7 +51,5 @@ logger.info("App started");
 
 await Deno.signal(Deno.Signal.SIGINT);
 logger.info("Shutdown the App");
-await db.saveAndClose();
-logger.info("Database saved!");
 logger.info("Bye Bye");
 Deno.exit(0);

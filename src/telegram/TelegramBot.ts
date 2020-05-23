@@ -5,7 +5,7 @@ import {
   IncomingMessageUpdates,
   OutgoingMessage,
 } from "./TelegramTypes.ts";
-import { genUrl } from "../core/UrlUtils.ts";
+import { genUrl } from "../core/Utils.ts";
 
 const TELEGRAM_BASE_URL =
   Deno.env.get("TELEGRAM_BASE_URL") || "https://api.telegram.org/bot";

@@ -7,8 +7,9 @@ export type VisitorResult = {
 
 export enum VisitorStatus {
   FULL,
-  PARTLY,
+  ALMOST_FULL,
   FREE,
+  UNKNOWN,
 }
 
 export default VisitorResult;
