@@ -31,12 +31,12 @@ export class ActDbDatastore implements Datastore {
     const visitors = await this.visitorStore.read();
     return visitors.length > 0
       ? {
-          ...visitors[visitors.length - 1],
-          timestamp: new Date(visitors[visitors.length - 1].timestamp),
-        }
+        ...visitors[visitors.length - 1],
+        timestamp: new Date(visitors[visitors.length - 1].timestamp),
+      }
       : {
-          timestamp: new Date(),
-          visitorStatus: { count: 0, status: VisitorStatus.UNKNOWN },
-        };
+        timestamp: new Date(),
+        visitorStatus: { count: 0, status: VisitorStatus.UNKNOWN },
+      };
   }
 }

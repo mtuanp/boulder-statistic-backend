@@ -10,9 +10,9 @@ export class DailyFileAdapter extends actdb.FileAdapter {
 
   overrideActualFilePath(): void {
     const now = new Date();
-    super.filePath = `${this.baseFilePath}/${now.getFullYear()}_${
-      now.getMonth() + 1
-    }_${now.getDate()}_${this.fileName}`;
+    super.filePath =
+      `${this.baseFilePath}/${now.getFullYear()}_${now.getMonth() +
+        1}_${now.getDate()}_${this.fileName}`;
   }
 
   read() {

@@ -7,8 +7,8 @@ import {
 } from "./TelegramTypes.ts";
 import { genUrl } from "../core/Utils.ts";
 
-const TELEGRAM_BASE_URL =
-  Deno.env.get("TELEGRAM_BASE_URL") || "https://api.telegram.org/bot";
+const TELEGRAM_BASE_URL = Deno.env.get("TELEGRAM_BASE_URL") ||
+  "https://api.telegram.org/bot";
 const TELEGRAM_BOT_TOKEN = Deno.env.get("TELEGRAM_BOT_TOKEN") || "";
 const TELEGRAM_URL = TELEGRAM_BASE_URL + TELEGRAM_BOT_TOKEN;
 const TELEGRAM_POLL_TIMEOUT = +(Deno.env.get("TELEGRAM_POLL_TIMEOUT") || "120");

@@ -18,6 +18,6 @@ Deno.test("Kosmos parser", () => {
   const parser = new KosmosParser(mockFetch);
   const actualResult = parser.parseActualVisitorStatus();
   return actualResult.then((result) =>
-    assertEquals(result, { count: 2, status: VisitorStatus.FREE }),
+    assertEquals(result, { count: 2, status: VisitorStatus.FREE })
   );
 });

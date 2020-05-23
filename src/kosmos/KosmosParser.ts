@@ -41,12 +41,11 @@ export class KosmosParser implements Parser {
         const visitorCount = +freeCounterGroup[1];
         return {
           count: visitorCount,
-          status:
-            visitorCount >= 0 && visitorCount < AlmostFullThreshold
-              ? VisitorStatus.FREE
-              : visitorCount >= FullThreshold
-              ? VisitorStatus.FULL
-              : VisitorStatus.ALMOST_FULL,
+          status: visitorCount >= 0 && visitorCount < AlmostFullThreshold
+            ? VisitorStatus.FREE
+            : visitorCount >= FullThreshold
+            ? VisitorStatus.FULL
+            : VisitorStatus.ALMOST_FULL,
         };
       }
     }

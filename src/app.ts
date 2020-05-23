@@ -9,6 +9,7 @@ import { start, addMessageHandler } from "./telegram/TelegramBot.ts";
 import { handleKosmosTelegramMessage } from "./kosmos/KosmosTelegramMessageHandler.ts";
 import { ActDbDatastore as Datastore } from "./persistence/ActDbDatastore.ts";
 import { VisitorStatusEvent } from "./core/Events.ts";
+import { handleDefaultTelegramMessage } from "./telegram/TelegramDefaultMessageHandler.ts";
 
 const EVERY_MINUTES = +(Deno.env.get("EVERY_MINUTES") || "5");
 
@@ -18,6 +19,7 @@ const db = new Datastore();
 await db.init();
 
 addMessageHandler((msg) => handleKosmosTelegramMessage(db, msg));
+addMessageHandler(handleDefaultTelegramMessage);
 start();
 
 const cron = new Cron();
