@@ -11,6 +11,12 @@ jobs:
       - uses: denolib/setup-deno@master
         with:
           deno-version: v1.0.2
+      - uses: actions/cache@v1
+        with:
+          path: ~/.deno
+          key: ${{ runner.os }}-deno-${{ hashFiles('src/deps.ts') }}
+          restore-keys: |
+            ${{ runner.os }}-deno-
       - run: deno test -A --unstable
       - run: deno bundle --unstable src/app.ts dist.bundle.js
       - uses: actions/upload-artifact@master
