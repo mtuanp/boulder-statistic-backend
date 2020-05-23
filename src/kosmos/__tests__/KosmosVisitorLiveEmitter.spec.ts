@@ -1,15 +1,10 @@
-import { assertEquals, assert } from "../../deps.ts";
-import { fs } from "../../deps.ts";
-import { mock } from "../../deps.ts";
-import { KosmosVisitorLiveEmitter } from "../KosmosVisitorLiveEmitter.ts";
-import { KosmosParser } from "../../kosmos/KosmosParser.ts";
 import { Datastore } from "../../core/Datastore.ts";
-import { Evt } from "../../deps.ts";
-import { VisitorStoreEntry } from "../../core/VisitorStoreEntry.ts";
-import Parser from "../../core/Parser.ts";
-import { VisitorStatus } from "../../core/VisitorResult.ts";
 import { Gym } from "../../core/Gym.ts";
+import Parser from "../../core/Parser.ts";
 import { VisitorEventData } from "../../core/VisitorEventData.ts";
+import { VisitorStatus } from "../../core/VisitorResult.ts";
+import { assert, assertEquals, Evt } from "../../deps.ts";
+import { KosmosVisitorLiveEmitter } from "../KosmosVisitorLiveEmitter.ts";
 
 Deno.test("testing emitter", () => {
   const expectedStoreEntry = {

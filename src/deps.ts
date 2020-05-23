@@ -9,6 +9,4 @@ export { LogRecord } from "https://deno.land/std@0.53.0/log/logger.ts";
 export { Cron } from "https://deno.land/x/cron/cron.ts";
 export { Evt } from "https://deno.land/x/evt/mod.ts";
 export { Html5Entities } from "https://deno.land/x/html_entities@v1.0/mod.js";
-export * as sql from "https://deno.land/x/sqlite/mod.ts";
-export * as mock from "https://deno.land/x/mock/mod.ts";
 export * as actdb from "https://deno.land/x/actdb/mod.ts";

@@ -11,4 +11,9 @@ jobs:
       - uses: denolib/setup-deno@master
         with:
           deno-version: v1.0.2
-      - run: deno test -A --unstable src/kosmos/__tests__/KosmosParser.spec.ts
+      - run: find . -type f -name "*.spec.ts" -exec deno test -A --unstable {} \;
+      - run: deno bundle --unstable src/app.ts dist.bundle.js
+      - uses: actions/upload-artifact@master
+        with:
+          name: bundle build
+          path: dist.bundle.js
