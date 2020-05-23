@@ -10,5 +10,5 @@ jobs:
       - uses: actions/checkout@master
       - uses: denolib/setup-deno@master
         with:
-          deno-version: v1.0.0
-      - run: deno run https://deno.land/std/examples/welcome.ts
+          deno-version: v1.0.2
+      - run: deno test -A --unstable src/kosmos/__tests__/KosmosParser.spec.ts
