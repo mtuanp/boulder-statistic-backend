@@ -4,6 +4,7 @@ import { VisitorEventData } from "../core/VisitorEventData.ts";
 import { VisitorStatus } from "../core/VisitorResult.ts";
 import { sendMessage } from "../telegram/TelegramBot.ts";
 import { OutgoingMessage } from "../telegram/TelegramTypes.ts";
+import { gymEnumToString, statusEnumToString } from "../core/Utils.ts";
 
 export async function handleNewVisitorStatus(
   appDatastore: AppDatastore,
@@ -59,6 +60,22 @@ export function findUsersAndNotify(
   allUserNotifications: UserNotificationSetting[],
   sendMessage: (outgoingMessage: OutgoingMessage) => void,
 ): void {
-  allUserNotifications.find((not) => actualVisitorStatus <= not.threshold);
-  allUserNotifications.find((not) => actualVisitorStatus > not.threshold);
+  allUserNotifications
+    .filter((n) => actualVisitorStatus <= n.threshold)
+    .map(({ chat_id, gym }) => ({
+      chat_id,
+      text: `${gymEnumToString(gym)} is actual ${statusEnumToString(
+        actualVisitorStatus,
+      )}`,
+    }))
+    .forEach((out) => sendMessage(out));
+  allUserNotifications
+    .filter((n) => actualVisitorStatus > n.threshold)
+    .map(({ chat_id, gym }) => ({
+      chat_id,
+      text: `${gymEnumToString(gym)} is back to ${statusEnumToString(
+        actualVisitorStatus,
+      )}`,
+    }))
+    .forEach((out) => sendMessage(out));
 }
