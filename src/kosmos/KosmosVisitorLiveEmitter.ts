@@ -22,13 +22,17 @@ export class KosmosVisitorLiveEmitter implements VisitorLiveEmitter {
 
   async emitActualVisitor(): Promise<void> {
     const visitorStatus = await this.parser.parseActualVisitorStatus();
+    const lastVisitorStatus = await this.datastore.getLatestVisitorStatus(
+      Gym.KOSMOS,
+    );
     const visitorStatureStore = {
       timestamp: new Date(),
       visitorStatus,
     };
     this.datastore.insertVisitor(Gym.KOSMOS, visitorStatureStore);
     this.visitorEvent.postAsyncOnceHandled({
-      ...visitorStatureStore,
+      actualVisitorStatus: visitorStatureStore,
+      lastVisitorStatus: lastVisitorStatus,
       gym: Gym.KOSMOS,
     });
   }

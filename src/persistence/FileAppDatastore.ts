@@ -22,6 +22,10 @@ export class FileAppDatastore implements AppDatastore {
     logger.debug("App Datastore is ready");
   }
 
+  async getAllUserNotification(gym: Gym): Promise<UserNotificationSetting[]> {
+    return this.userNotificationSettings.filter((uns) => uns.gym === gym);
+  }
+
   async getUserNotification(
     chat_id: number,
     gym: Gym,

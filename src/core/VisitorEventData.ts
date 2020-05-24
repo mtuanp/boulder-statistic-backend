@@ -3,4 +3,6 @@ import { VisitorStoreEntry } from "./VisitorStoreEntry.ts";
 
 export type VisitorEventData = {
   gym: Gym;
-} & VisitorStoreEntry;
+  actualVisitorStatus: VisitorStoreEntry;
+  lastVisitorStatus: VisitorStoreEntry;
+};

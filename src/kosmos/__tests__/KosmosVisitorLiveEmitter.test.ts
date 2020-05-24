@@ -12,18 +12,31 @@ Deno.test("testing emitter", () => {
   };
   const expectedEventData = {
     gym: 0,
-    visitorStatus: { count: 12, status: 2 },
-  };
+    actualVisitorStatus: {
+      visitorStatus: {
+        count: 12,
+        status: VisitorStatus.FREE,
+      },
+    },
+    lastVisitorStatus: {
+      timestamp: new Date(2020, 4, 23, 13, 0, 0),
+      visitorStatus: {
+        count: 8,
+        status: VisitorStatus.FREE,
+      },
+    },
+  } as VisitorEventData;
   const db: VisitorDatastore = {
     insertVisitor: async (gym, entry) => {
       assertEquals(gym, Gym.KOSMOS);
       delete entry.timestamp;
       assertEquals(entry, expectedStoreEntry);
     },
+    getLatestVisitorStatus: async (gym) => expectedEventData.lastVisitorStatus,
   } as VisitorDatastore;
   const event: Evt<VisitorEventData> = {
     postAsyncOnceHandled: (entry) => {
-      delete entry.timestamp;
+      delete entry.actualVisitorStatus.timestamp;
       assertEquals(entry, expectedEventData);
       return 1;
     },

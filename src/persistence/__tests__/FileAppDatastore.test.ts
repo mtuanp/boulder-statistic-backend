@@ -102,3 +102,35 @@ Deno.test(
     });
   },
 );
+
+Deno.test("FileAppDatastore - testing datastore get all ", async () => {
+  fs.ensureDirSync("tmp/appDatbase3");
+  fs.emptyDirSync("tmp/appDatbase3");
+  const db = new FileAppDatastore("tmp/appDatbase3");
+  await db.init();
+
+  await db.addOrUpdateUserNotification({
+    chat_id: 42,
+    gym: Gym.KOSMOS,
+    threshold: VisitorStatus.ALMOST_FULL,
+  });
+  await db.addOrUpdateUserNotification({
+    chat_id: 66,
+    gym: Gym.KOSMOS,
+    threshold: VisitorStatus.ALMOST_FULL,
+  });
+
+  const userNotifications = await db.getAllUserNotification(Gym.KOSMOS);
+  assertEquals(userNotifications, [
+    {
+      chat_id: 42,
+      gym: Gym.KOSMOS,
+      threshold: VisitorStatus.ALMOST_FULL,
+    },
+    {
+      chat_id: 66,
+      gym: Gym.KOSMOS,
+      threshold: VisitorStatus.ALMOST_FULL,
+    },
+  ]);
+});

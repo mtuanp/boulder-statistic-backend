@@ -8,8 +8,10 @@ import { logger } from "./log.ts";
 import { start, addMessageHandler } from "./telegram/TelegramBot.ts";
 import { handleKosmosTelegramMessage } from "./kosmos/KosmosTelegramMessageHandler.ts";
 import { FileVisitorDatastore as VisitorDatastore } from "./persistence/FileVisitorDatastore.ts";
+import { FileAppDatastore as AppDatastore } from "./persistence/FileAppDatastore.ts";
 import { VisitorStatusEvent } from "./core/Events.ts";
 import { handleDefaultTelegramMessage } from "./telegram/TelegramDefaultMessageHandler.ts";
+import { handleNewVisitorStatus } from "./notification/GymChangeStatusHandler.ts";
 
 const EVERY_MINUTES = +(Deno.env.get("EVERY_MINUTES") || "5");
 
@@ -17,6 +19,10 @@ logger.info("Bootstrapping app");
 
 const db = new VisitorDatastore();
 await db.init();
+const appDb = new AppDatastore();
+await appDb.init();
+
+VisitorStatusEvent.attach((event) => handleNewVisitorStatus(appDb, event));
 
 addMessageHandler((msg) => handleKosmosTelegramMessage(db, msg));
 addMessageHandler(handleDefaultTelegramMessage);
