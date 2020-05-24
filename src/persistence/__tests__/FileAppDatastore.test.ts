@@ -134,3 +134,31 @@ Deno.test("FileAppDatastore - testing datastore get all ", async () => {
     },
   ]);
 });
+
+Deno.test("FileAppDatastore - testing datastore remove ", async () => {
+  fs.ensureDirSync("tmp/appDatbase3");
+  fs.emptyDirSync("tmp/appDatbase3");
+  const db = new FileAppDatastore("tmp/appDatbase3");
+  await db.init();
+
+  await db.addOrUpdateUserNotification({
+    chat_id: 42,
+    gym: Gym.KOSMOS,
+    threshold: VisitorStatus.ALMOST_FULL,
+  });
+  await db.addOrUpdateUserNotification({
+    chat_id: 66,
+    gym: Gym.KOSMOS,
+    threshold: VisitorStatus.ALMOST_FULL,
+  });
+  await db.removeUserNotification(42, Gym.KOSMOS);
+
+  const userNotifications = await db.getAllUserNotification(Gym.KOSMOS);
+  assertEquals(userNotifications, [
+    {
+      chat_id: 66,
+      gym: Gym.KOSMOS,
+      threshold: VisitorStatus.ALMOST_FULL,
+    },
+  ]);
+});

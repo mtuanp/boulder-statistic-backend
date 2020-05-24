@@ -49,7 +49,7 @@ import {
       ),
       data[4],
     );
-  }),
+  })
 );
 
 Deno.test("GymChangeStatusHandler - testing findUsersAndNotify", () => {
@@ -68,8 +68,10 @@ Deno.test("GymChangeStatusHandler - testing findUsersAndNotify", () => {
     },
   ];
   let index = 0;
-  findUsersAndNotify(VisitorStatus.ALMOST_FULL, notSettings, (out) =>
-    assertEquals(out, expectedOut[index++]),
+  findUsersAndNotify(
+    VisitorStatus.ALMOST_FULL,
+    notSettings,
+    (out) => assertEquals(out, expectedOut[index++]),
   );
 });
 
@@ -89,7 +91,9 @@ Deno.test("GymChangeStatusHandler - testing findUsersAndNotify 2", () => {
     },
   ];
   let index = 0;
-  findUsersAndNotify(VisitorStatus.FULL, notSettings, (out) =>
-    assertEquals(out, expectedOut[index++]),
+  findUsersAndNotify(
+    VisitorStatus.FULL,
+    notSettings,
+    (out) => assertEquals(out, expectedOut[index++]),
   );
 });

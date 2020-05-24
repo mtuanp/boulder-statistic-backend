@@ -10,11 +10,11 @@ export async function handleNewVisitorStatus(
   appDatastore: AppDatastore,
   {
     gym,
-    actualVisitorStatus: {
+actualVisitorStatus: {
       timestamp: actualTimestamp,
       visitorStatus: actualVisitorStatus,
     },
-    lastVisitorStatus: {
+lastVisitorStatus: {
       timestamp: latestTimestamp,
       visitorStatus: latestVisitorStatus,
     },
@@ -37,7 +37,7 @@ export async function handleNewVisitorStatus(
         actualVisitorStatus.status,
         allUserNotifications,
         sendMessage,
-      ),
+      )
     );
 }
 
@@ -64,18 +64,22 @@ export function findUsersAndNotify(
     .filter((n) => actualVisitorStatus <= n.threshold)
     .map(({ chat_id, gym }) => ({
       chat_id,
-      text: `${gymEnumToString(gym)} is actual ${statusEnumToString(
-        actualVisitorStatus,
-      )}`,
+      text: `${gymEnumToString(gym)} is actual ${
+        statusEnumToString(
+          actualVisitorStatus,
+        )
+      }`,
     }))
     .forEach((out) => sendMessage(out));
   allUserNotifications
     .filter((n) => actualVisitorStatus > n.threshold)
     .map(({ chat_id, gym }) => ({
       chat_id,
-      text: `${gymEnumToString(gym)} is back to ${statusEnumToString(
-        actualVisitorStatus,
-      )}`,
+      text: `${gymEnumToString(gym)} is back to ${
+        statusEnumToString(
+          actualVisitorStatus,
+        )
+      }`,
     }))
     .forEach((out) => sendMessage(out));
 }

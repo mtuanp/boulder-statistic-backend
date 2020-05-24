@@ -17,8 +17,24 @@ const MessageUpdateEvent = new Evt<IncomingMessageUpdates>();
 const MessageEvent = new Evt<IncomingMessage>();
 
 export function sendMessage(outgoingMessage: OutgoingMessage) {
-  fetch(genUrl(`${TELEGRAM_URL}/sendMessage`, outgoingMessage))
-    .then(() => logger.debug("Message send done"))
+  fetch(genUrl(`${TELEGRAM_URL}/sendMessage`), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(outgoingMessage),
+  })
+    .then((response) => {
+      if (response.ok) {
+        logger.debug("Message send done");
+      } else {
+        logger.error(
+          "Message send error",
+          response.status,
+          response.statusText,
+        );
+      }
+    })
     .catch((error) => logger.error("Message send error", error));
 }
 

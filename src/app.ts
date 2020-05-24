@@ -24,7 +24,7 @@ await appDb.init();
 
 VisitorStatusEvent.attach((event) => handleNewVisitorStatus(appDb, event));
 
-addMessageHandler((msg) => handleKosmosTelegramMessage(db, msg));
+addMessageHandler((msg) => handleKosmosTelegramMessage(db, appDb, msg));
 addMessageHandler(handleDefaultTelegramMessage);
 start();
 
