@@ -1,10 +1,15 @@
 import { extractBotCommand } from "../core/Utils.ts";
 import { sendMessage } from "./TelegramBot.ts";
 import { IncomingMessage } from "./TelegramTypes.ts";
+import { KOSMOS_INLINE_COMMANDS } from "../kosmos/KosmosTelegramMessageHandler.ts";
 
 const excludedBotCommand = ["/kosmos"];
-const CommandHelpMsg =
-  "following commands are available: - /kosmosstatus: get the latest visitor status from kosmos";
+const CommandHelpMsg = "following command are available:";
+const InlineHelpMarkup = {
+  inline_keyboard: [
+    KOSMOS_INLINE_COMMANDS,
+  ],
+};
 
 export async function handleDefaultTelegramMessage(
   incomingMessage: IncomingMessage,
@@ -14,6 +19,7 @@ export async function handleDefaultTelegramMessage(
     sendMessage({
       chat_id: chat.id,
       text: `Welcome ` + CommandHelpMsg,
+      reply_markup: InlineHelpMarkup,
     });
   } else if (
     type !== "bot_command" ||
@@ -22,7 +28,8 @@ export async function handleDefaultTelegramMessage(
   ) {
     sendMessage({
       chat_id: chat.id,
-      text: CommandHelpMsg,
+      text: "following command are available:",
+      reply_markup: InlineHelpMarkup,
     });
   }
 }

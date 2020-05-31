@@ -5,8 +5,15 @@ import { Cron } from "./deps.ts";
 import { KosmosVisitorLiveEmitter } from "./kosmos/KosmosVisitorLiveEmitter.ts";
 import { KosmosParser } from "./kosmos/KosmosParser.ts";
 import { logger } from "./log.ts";
-import { start, addMessageHandler } from "./telegram/TelegramBot.ts";
-import { handleKosmosTelegramMessage } from "./kosmos/KosmosTelegramMessageHandler.ts";
+import {
+  start,
+  addMessageHandler,
+  addCallbackHandler,
+} from "./telegram/TelegramBot.ts";
+import {
+  handleKosmosTelegramMessage,
+  handleKosmosTelegramMessageCallback,
+} from "./kosmos/KosmosTelegramMessageHandler.ts";
 import { FileVisitorDatastore as VisitorDatastore } from "./persistence/FileVisitorDatastore.ts";
 import { FileAppDatastore as AppDatastore } from "./persistence/FileAppDatastore.ts";
 import { VisitorStatusEvent } from "./core/Events.ts";
@@ -24,6 +31,9 @@ await appDb.init();
 
 VisitorStatusEvent.attach((event) => handleNewVisitorStatus(appDb, event));
 
+addCallbackHandler((msg) =>
+  handleKosmosTelegramMessageCallback(db, appDb, msg)
+);
 addMessageHandler((msg) => handleKosmosTelegramMessage(db, appDb, msg));
 addMessageHandler(handleDefaultTelegramMessage);
 start();

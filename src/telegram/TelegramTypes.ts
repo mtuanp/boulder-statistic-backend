@@ -24,9 +24,20 @@ export type IncomingMessage = {
   entities?: MessageEntity[];
 };
 
+export type CallbackQuery = {
+  id: string;
+  from: User;
+  message?: IncomingMessage;
+  inline_message_id?: string;
+  chat_instance?: string;
+  data?: string;
+  game_short_name?: string;
+};
+
 export type IncomingUpdate = {
   update_id: number;
   message?: IncomingMessage;
+  callback_query?: CallbackQuery;
 };
 
 export type IncomingMessageUpdates = {
@@ -42,4 +53,12 @@ export type OutgoingMessage = {
   disable_notification?: boolean;
   reply_to_message_id?: number;
   reply_markup?: any;
+};
+
+export type OutgoingCallbackAnswerMessage = {
+  callback_query_id: string;
+  text: string;
+  show_alert?: boolean;
+  url?: string;
+  cache_time?: number;
 };
