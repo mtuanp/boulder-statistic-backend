@@ -1,6 +1,6 @@
 export type VisitorResult = {
   /** visitor count when available */
-  count: number | undefined;
+  count?: number;
 
   status: VisitorStatus;
 };

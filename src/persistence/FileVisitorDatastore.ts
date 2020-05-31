@@ -5,14 +5,15 @@ import { VisitorStatus } from "../core/VisitorResult.ts";
 import { VisitorStoreEntry } from "../core/VisitorStoreEntry.ts";
 import { fs } from "../deps.ts";
 import { logger } from "../log.ts";
+import { defaultDataPathMap } from "./Constants.ts";
 
 export class FileVisitorDatastore implements VisitorDatastore {
   dataPathMap: Map<Gym, { path: string; lastUpdate?: VisitorStoreEntry }>;
   constructor(
-    kosmosDataPath: string = Deno.env.get("KOSMOS_DATA_PATH") || "data/kosmos",
+    dataPathMap: Map<Gym, { path: string; lastUpdate?: VisitorStoreEntry }> =
+      defaultDataPathMap(),
   ) {
-    this.dataPathMap = new Map();
-    this.dataPathMap.set(Gym.KOSMOS, { path: kosmosDataPath });
+    this.dataPathMap = dataPathMap;
   }
 
   async init() {

@@ -5,10 +5,16 @@ import { Gym } from "../../core/Gym.ts";
 import { VisitorStatus } from "../../core/VisitorResult.ts";
 import { delay, buildDateString } from "../../core/Utils.ts";
 
+const createDataPathMap = (path: String) => {
+  const dataPathMap = new Map();
+  dataPathMap.set(Gym.KOSMOS, { path });
+  return dataPathMap;
+};
+
 Deno.test("FileVisitorDatastore - testing datastore init", async () => {
   fs.ensureDirSync("tmp/visitDatabase");
   fs.emptyDirSync("tmp/visitDatabase");
-  const db = new FileVisitorDatastore("tmp/visitDatabase");
+  const db = new FileVisitorDatastore(createDataPathMap("tmp/visitDatabase"));
   await db.init();
   await db.insertVisitor(Gym.KOSMOS, {
     timestamp: new Date(),
@@ -24,7 +30,7 @@ Deno.test("FileVisitorDatastore - testing datastore read", async () => {
   fs.ensureDirSync("tmp/visitDatabase2");
   fs.emptyDirSync("tmp/visitDatabase2");
 
-  const db = new FileVisitorDatastore("tmp/visitDatabase2");
+  const db = new FileVisitorDatastore(createDataPathMap("tmp/visitDatabase2"));
   await db.init();
   const lastStatus = await db.getLatestVisitorStatus(Gym.KOSMOS);
   delete lastStatus.timestamp;
@@ -47,7 +53,9 @@ Deno.test(
       visitorStatus: { count: 0, status: VisitorStatus.UNKNOWN },
     };
     fs.writeJsonSync(filePath, [expectedStatusEntry]);
-    const db = new FileVisitorDatastore("tmp/visitDatabase2");
+    const db = new FileVisitorDatastore(
+      createDataPathMap("tmp/visitDatabase2"),
+    );
     await db.init();
     const lastStatus = await db.getLatestVisitorStatus(Gym.KOSMOS);
     await delay(0);
@@ -60,7 +68,9 @@ Deno.test(
   async () => {
     fs.ensureDirSync("tmp/visitDatabase3");
     fs.emptyDirSync("tmp/visitDatabase3");
-    const db = new FileVisitorDatastore("tmp/visitDatabase3");
+    const db = new FileVisitorDatastore(
+      createDataPathMap("tmp/visitDatabase3"),
+    );
     await db.init();
 
     await db.insertVisitor(Gym.KOSMOS, {

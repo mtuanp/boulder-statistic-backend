@@ -2,12 +2,14 @@ import { extractBotCommand } from "../core/Utils.ts";
 import { sendMessage } from "./TelegramBot.ts";
 import { IncomingMessage } from "./TelegramTypes.ts";
 import { KOSMOS_INLINE_COMMANDS } from "../gyms/kosmos/KosmosTelegramMessageHandler.ts";
+import { BLOC_INLINE_COMMANDS } from "../gyms/bloc_bouldering/BlocTelegramMessageHandler.ts";
 
 const excludedBotCommand = ["/kosmos"];
 const CommandHelpMsg = "following command are available:";
 const InlineHelpMarkup = {
   inline_keyboard: [
     KOSMOS_INLINE_COMMANDS,
+    BLOC_INLINE_COMMANDS
   ],
 };
 
