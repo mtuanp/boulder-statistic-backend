@@ -1,7 +1,7 @@
-import { Html5Entities } from "../deps.ts";
+import { Html5Entities } from "../../deps.ts";
 
-import { Parser } from "../core/Parser.ts";
-import { VisitorResult, VisitorStatus } from "../core/VisitorResult.ts";
+import { Parser } from "../../core/Parser.ts";
+import { VisitorResult, VisitorStatus } from "../../core/VisitorResult.ts";
 
 const BoulderadoIframeRegEx = new RegExp(
   'iframe src="(.*)" name="Boulderado Clientcounter"',

@@ -1,9 +1,9 @@
-import { VisitorDatastore } from "../../core/VisitorDatastore.ts";
-import { Gym } from "../../core/Gym.ts";
-import Parser from "../../core/Parser.ts";
-import { VisitorEventData } from "../../core/VisitorEventData.ts";
-import { VisitorStatus } from "../../core/VisitorResult.ts";
-import { assert, assertEquals, Evt } from "../../deps.ts";
+import { VisitorDatastore } from "../../../core/VisitorDatastore.ts";
+import { Gym } from "../../../core/Gym.ts";
+import Parser from "../../../core/Parser.ts";
+import { VisitorEventData } from "../../../core/VisitorEventData.ts";
+import { VisitorStatus } from "../../../core/VisitorResult.ts";
+import { assert, assertEquals, Evt } from "../../../deps.ts";
 import { KosmosVisitorLiveEmitter } from "../KosmosVisitorLiveEmitter.ts";
 
 Deno.test("testing emitter", () => {

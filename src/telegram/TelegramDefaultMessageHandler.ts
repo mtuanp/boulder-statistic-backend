@@ -1,7 +1,7 @@
 import { extractBotCommand } from "../core/Utils.ts";
 import { sendMessage } from "./TelegramBot.ts";
 import { IncomingMessage } from "./TelegramTypes.ts";
-import { KOSMOS_INLINE_COMMANDS } from "../kosmos/KosmosTelegramMessageHandler.ts";
+import { KOSMOS_INLINE_COMMANDS } from "../gyms/kosmos/KosmosTelegramMessageHandler.ts";
 
 const excludedBotCommand = ["/kosmos"];
 const CommandHelpMsg = "following command are available:";

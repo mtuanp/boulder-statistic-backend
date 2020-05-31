@@ -1,11 +1,17 @@
-import { VisitorDatastore } from "../core/VisitorDatastore.ts";
-import { Gym } from "../core/Gym.ts";
-import { statusEnumToString, extractBotCommand } from "../core/Utils.ts";
-import { logger } from "../log.ts";
-import { sendMessage, answerCallbackQuery } from "../telegram/TelegramBot.ts";
-import { IncomingMessage, CallbackQuery } from "../telegram/TelegramTypes.ts";
-import { AppDatastore } from "../core/AppDatastore.ts";
-import { VisitorStatus } from "../core/VisitorResult.ts";
+import { VisitorDatastore } from "../../core/VisitorDatastore.ts";
+import { Gym } from "../../core/Gym.ts";
+import { statusEnumToString, extractBotCommand } from "../../core/Utils.ts";
+import { logger } from "../../log.ts";
+import {
+  sendMessage,
+  answerCallbackQuery,
+} from "../../telegram/TelegramBot.ts";
+import {
+  IncomingMessage,
+  CallbackQuery,
+} from "../../telegram/TelegramTypes.ts";
+import { AppDatastore } from "../../core/AppDatastore.ts";
+import { VisitorStatus } from "../../core/VisitorResult.ts";
 
 export const KOSMOS_INLINE_COMMANDS = [
   {

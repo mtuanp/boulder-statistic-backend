@@ -2,8 +2,8 @@ import "https://deno.land/x/dotenv/load.ts";
 
 import { Cron } from "./deps.ts";
 
-import { KosmosVisitorLiveEmitter } from "./kosmos/KosmosVisitorLiveEmitter.ts";
-import { KosmosParser } from "./kosmos/KosmosParser.ts";
+import { KosmosVisitorLiveEmitter } from "./gyms/kosmos/KosmosVisitorLiveEmitter.ts";
+import { KosmosParser } from "./gyms/kosmos/KosmosParser.ts";
 import { logger } from "./log.ts";
 import {
   start,
@@ -13,7 +13,7 @@ import {
 import {
   handleKosmosTelegramMessage,
   handleKosmosTelegramMessageCallback,
-} from "./kosmos/KosmosTelegramMessageHandler.ts";
+} from "./gyms/kosmos/KosmosTelegramMessageHandler.ts";
 import { FileVisitorDatastore as VisitorDatastore } from "./persistence/FileVisitorDatastore.ts";
 import { FileAppDatastore as AppDatastore } from "./persistence/FileAppDatastore.ts";
 import { VisitorStatusEvent } from "./core/Events.ts";

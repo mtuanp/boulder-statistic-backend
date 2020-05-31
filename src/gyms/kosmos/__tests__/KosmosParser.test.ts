@@ -1,5 +1,5 @@
-import { VisitorStatus } from "../../core/VisitorResult.ts";
-import { assertEquals } from "../../deps.ts";
+import { VisitorStatus } from "../../../core/VisitorResult.ts";
+import { assertEquals } from "../../../deps.ts";
 import { KosmosParser } from "../KosmosParser.ts";
 
 const mockFetch = async (url: string) => {
