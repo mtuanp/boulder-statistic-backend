@@ -1,30 +1,39 @@
 import "https://deno.land/x/dotenv/load.ts";
 
 import { Cron } from "./deps.ts";
-
-import { KosmosVisitorLiveEmitter } from "./gyms/kosmos/KosmosVisitorLiveEmitter.ts";
-import { KosmosParser } from "./gyms/kosmos/KosmosParser.ts";
 import { logger } from "./log.ts";
+
+import {
+  KosmosVisitorLiveEmitter,
+  KosmosParser,
+  handleKosmosTelegramMessage,
+  handleKosmosTelegramMessageCallback,
+} from "./gyms/kosmos/index.ts";
+
+import {
+  handleBlocTelegramMessage,
+  handleBlocTelegramMessageCallback,
+  BlocVisitorLiveEmitter,
+  BlocParser,
+} from "./gyms/bloc_bouldering/index.ts";
+
+import {
+  handleBlocNoLimitTelegramMessageCallback,
+  handleBlocNoLimitTelegramMessage,
+  BlocNoLimitVisitorLiveEmitter,
+  BlocNoLimitParser,
+} from "./gyms/bloc_nolimit/index.ts";
+
 import {
   start,
   addMessageHandler,
   addCallbackHandler,
 } from "./telegram/TelegramBot.ts";
-import {
-  handleKosmosTelegramMessage,
-  handleKosmosTelegramMessageCallback,
-} from "./gyms/kosmos/KosmosTelegramMessageHandler.ts";
 import { FileVisitorDatastore as VisitorDatastore } from "./persistence/FileVisitorDatastore.ts";
 import { FileAppDatastore as AppDatastore } from "./persistence/FileAppDatastore.ts";
 import { VisitorStatusEvent } from "./core/Events.ts";
 import { handleDefaultTelegramMessage } from "./telegram/TelegramDefaultMessageHandler.ts";
 import { handleNewVisitorStatus } from "./notification/GymChangeStatusHandler.ts";
-import {
-  handleBlocTelegramMessage,
-  handleBlocTelegramMessageCallback,
-} from "./gyms/bloc_bouldering/BlocTelegramMessageHandler.ts";
-import { BlocVisitorLiveEmitter } from "./gyms/bloc_bouldering/BlocVisitorLiveEmitter.ts";
-import { BlocParser } from "./gyms/bloc_bouldering/BlocParser.ts";
 
 const EVERY_MINUTES = +(Deno.env.get("EVERY_MINUTES") || "5");
 
@@ -44,6 +53,11 @@ addMessageHandler((msg) => handleKosmosTelegramMessage(db, appDb, msg));
 
 addCallbackHandler((msg) => handleBlocTelegramMessageCallback(db, appDb, msg));
 addMessageHandler((msg) => handleBlocTelegramMessage(db, appDb, msg));
+
+addCallbackHandler((msg) =>
+  handleBlocNoLimitTelegramMessageCallback(db, appDb, msg)
+);
+addMessageHandler((msg) => handleBlocNoLimitTelegramMessage(db, appDb, msg));
 
 addMessageHandler(handleDefaultTelegramMessage);
 start();
@@ -69,6 +83,16 @@ const blocWorkingHour = (Deno.env.get("BLOC_WORKING_HOUR") || "8-22")
   .split("-")
   .map((x) => +x);
 
+const blocNoLimitEmitter = new BlocNoLimitVisitorLiveEmitter(
+  db,
+  VisitorStatusEvent,
+  new BlocNoLimitParser(),
+);
+const blocNoLimitWorkingHour =
+  (Deno.env.get("BLOC_NOLIMIT_WORKING_HOUR") || "8-22")
+    .split("-")
+    .map((x) => +x);
+
 // cron
 cron.add(Deno.env.get("CRON") || "* * * * *", () => {
   const date = new Date();
@@ -92,6 +116,15 @@ cron.add(Deno.env.get("CRON") || "* * * * *", () => {
         .emitActualVisitor()
         .then(() => logger.info("Bloc bouldering status emitted"))
         .catch((error) => logger.error("Bloc bouldering error", error));
+    }
+    if (
+      hour >= blocNoLimitWorkingHour[0] &&
+      hour <= blocNoLimitWorkingHour[1]
+    ) {
+      blocNoLimitEmitter
+        .emitActualVisitor()
+        .then(() => logger.info("Bloc climbing status emitted"))
+        .catch((error) => logger.error("Bloc climbing error", error));
     }
   }
 });

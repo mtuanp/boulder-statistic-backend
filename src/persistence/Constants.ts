@@ -10,5 +10,9 @@ export const defaultDataPathMap = () => {
     Gym.BLOC_NO_LIMIT_BOULDERING,
     { path: Deno.env.get("BLOC_DATA_PATH") || "data/bloc_bouldering" },
   );
+  dataPathMap.set(
+    Gym.BLOC_NO_LIMIT_CLIMBING,
+    { path: Deno.env.get("BLOC_NOLIMIT_DATA_PATH") || "data/bloc_climbing" },
+  );
   return dataPathMap;
 };

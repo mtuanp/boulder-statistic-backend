@@ -14,29 +14,35 @@ import {
 import { AppDatastore } from "../../core/AppDatastore.ts";
 import { VisitorStatus } from "../../core/VisitorResult.ts";
 
-export const BLOC_COMMANDS: BotCommand[] = [
+export const BLOC_NOLIMIT_COMMANDS: BotCommand[] = [
   {
-    command: "blocstatus",
-    description: "retrieve the actual visitor status from bloc",
+    command: "bloc_climbingstatus",
+    description: "retrieve the actual visitor status from bloc climbing",
   },
-  { command: "blocon", description: "activate the threshold notification" },
-  { command: "blocoff", description: "deactivate the threshold notification" },
+  {
+    command: "bloc_climbingon",
+    description: "activate the threshold notification",
+  },
+  {
+    command: "bloc_climbingoff",
+    description: "deactivate the threshold notification",
+  },
 ];
 
-export const BLOC_INLINE_COMMANDS = BLOC_COMMANDS.map((
+export const BLOC_NOLIMIT_INLINE_COMMANDS = BLOC_NOLIMIT_COMMANDS.map((
   { command, description },
 ) => ({
   text: `/${command} - ${description}`,
   callback_data: `/${command}`,
 }));
 
-export async function handleBlocTelegramMessage(
+export async function handleBlocNoLimitTelegramMessage(
   datastore: VisitorDatastore,
   appDatastore: AppDatastore,
   incomingMessage: IncomingMessage,
 ): Promise<void> {
   const { chat, type, botCommand } = extractBotCommand(incomingMessage);
-  if (type === "bot_command" && botCommand.startsWith("/bloc")) {
+  if (type === "bot_command" && botCommand.startsWith("/bloc_climbing")) {
     handleBlocCommand(
       datastore,
       appDatastore,
@@ -52,13 +58,13 @@ export async function handleBlocTelegramMessage(
   }
 }
 
-export async function handleBlocTelegramMessageCallback(
+export async function handleBlocNoLimitTelegramMessageCallback(
   datastore: VisitorDatastore,
   appDatastore: AppDatastore,
   callbackQuery: CallbackQuery,
 ): Promise<void> {
   const { data: botCommand, from } = callbackQuery;
-  if (botCommand && botCommand.startsWith("/bloc")) {
+  if (botCommand && botCommand.startsWith("/bloc_climbing")) {
     handleBlocCommand(
       datastore,
       appDatastore,
@@ -82,16 +88,16 @@ function handleBlocCommand(
   sendCallback: (text: string, inlineReplay?: any) => void,
 ) {
   switch (botCommand) {
-    case "/blocstatus":
+    case "/bloc_climbingstatus":
       handleBlocStatus(datastore, sendCallback);
       break;
-    case "/blocon":
+    case "/bloc_climbingon":
       handleBlocOn(appDatastore, userId, sendCallback);
       break;
-    case "/blocoff":
+    case "/bloc_climbingoff":
       handleBlocOff(appDatastore, userId, sendCallback);
       break;
-    case "/blochelp":
+    case "/bloc_climbinghelp":
     default:
       handleBlocHelp(sendCallback);
       break;
@@ -103,10 +109,10 @@ function handleBlocStatus(
   sendCallback: (text: string) => void,
 ) {
   datastore
-    .getLatestVisitorStatus(Gym.BLOC_NO_LIMIT_BOULDERING)
+    .getLatestVisitorStatus(Gym.BLOC_NO_LIMIT_CLIMBING)
     .then((latestVisitorStatus) => {
       sendCallback(
-        `Bloc bouldering lastUpdate at ${latestVisitorStatus.timestamp.toLocaleDateString()} ${latestVisitorStatus.timestamp.toLocaleTimeString()} | status: ${
+        `Bloc climbing lastUpdate at ${latestVisitorStatus.timestamp.toLocaleDateString()} ${latestVisitorStatus.timestamp.toLocaleTimeString()} | status: ${
           statusEnumToString(
             latestVisitorStatus.visitorStatus.status,
           )
@@ -115,7 +121,7 @@ function handleBlocStatus(
     })
     .catch((error) => {
       sendCallback("Error something unexpected happens.");
-      logger.error("can't send last bloc status", "BLOC", error);
+      logger.error("can't send last bloc_climbing status", "BLOC", error);
     });
 }
 
@@ -127,7 +133,7 @@ function handleBlocOn(
   appDatastore
     .addOrUpdateUserNotification({
       chat_id: userId,
-      gym: Gym.BLOC_NO_LIMIT_BOULDERING,
+      gym: Gym.BLOC_NO_LIMIT_CLIMBING,
       threshold: VisitorStatus.ALMOST_FULL,
     })
     .then(() => {
@@ -151,7 +157,7 @@ function handleBlocOff(
   sendCallback: (text: string) => void,
 ) {
   appDatastore
-    .removeUserNotification(userId, Gym.BLOC_NO_LIMIT_BOULDERING)
+    .removeUserNotification(userId, Gym.BLOC_NO_LIMIT_CLIMBING)
     .then(() => {
       sendCallback("You will not be notified anymore.");
     })
@@ -164,9 +170,9 @@ function handleBlocOff(
 function handleBlocHelp(
   sendCallback: (text: string, inlineReplay?: any) => void,
 ) {
-  sendCallback("following Bloc bouldering command are available:", {
+  sendCallback("following Bloc climbing command are available:", {
     inline_keyboard: [
-      BLOC_INLINE_COMMANDS,
+      BLOC_NOLIMIT_INLINE_COMMANDS,
     ],
   });
 }

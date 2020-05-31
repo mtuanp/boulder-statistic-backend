@@ -3,13 +3,15 @@ import { sendMessage } from "./TelegramBot.ts";
 import { IncomingMessage } from "./TelegramTypes.ts";
 import { KOSMOS_INLINE_COMMANDS } from "../gyms/kosmos/KosmosTelegramMessageHandler.ts";
 import { BLOC_INLINE_COMMANDS } from "../gyms/bloc_bouldering/BlocTelegramMessageHandler.ts";
+import { BLOC_NOLIMIT_INLINE_COMMANDS } from "../gyms/bloc_nolimit/BlocNoLimitTelegramMessageHandler.ts";
 
-const excludedBotCommand = ["/kosmos", "/bloc"];
+const excludedBotCommand = ["/kosmos", "/bloc", "/bloc_climbing"];
 const CommandHelpMsg = "following command are available:";
 const InlineHelpMarkup = {
   inline_keyboard: [
     KOSMOS_INLINE_COMMANDS,
     BLOC_INLINE_COMMANDS,
+    BLOC_NOLIMIT_INLINE_COMMANDS,
   ],
 };
 
