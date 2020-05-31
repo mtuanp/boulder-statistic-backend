@@ -108,7 +108,7 @@ function handleBlocStatus(
           statusEnumToString(
             latestVisitorStatus.visitorStatus.status,
           )
-        } |  visitors: ${latestVisitorStatus.visitorStatus.count}`,
+        }`,
       );
     })
     .catch((error) => {
