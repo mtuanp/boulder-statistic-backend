@@ -9,24 +9,26 @@ import {
 import {
   IncomingMessage,
   CallbackQuery,
+  BotCommand,
 } from "../../telegram/TelegramTypes.ts";
 import { AppDatastore } from "../../core/AppDatastore.ts";
 import { VisitorStatus } from "../../core/VisitorResult.ts";
 
-export const BLOC_INLINE_COMMANDS = [
+export const BLOC_COMMANDS: BotCommand[] = [
   {
-    text: "/blocstatus - retrieve the actual visitor status from bloc",
-    callback_data: "/blocstatus",
+    command: "blocstatus",
+    description: "retrieve the actual visitor status from bloc",
   },
-  {
-    text: "/blocon - activate the threshold notification",
-    callback_data: "/blocon",
-  },
-  {
-    text: "/blocoff - deactivate the threshold notification",
-    callback_data: "/blocoff",
-  },
+  { command: "blocon", description: "activate the threshold notification" },
+  { command: "blocoff", description: "deactivate the threshold notification" },
 ];
+
+export const BLOC_INLINE_COMMANDS = BLOC_COMMANDS.map((
+  { command, description },
+) => ({
+  text: `/${command} - ${description}`,
+  callback_data: `/${command}`,
+}));
 
 export async function handleBlocTelegramMessage(
   datastore: VisitorDatastore,

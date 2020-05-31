@@ -62,3 +62,8 @@ export type OutgoingCallbackAnswerMessage = {
   url?: string;
   cache_time?: number;
 };
+
+export type BotCommand = {
+  command: string;
+  description: string;
+};

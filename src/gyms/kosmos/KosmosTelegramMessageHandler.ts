@@ -9,24 +9,29 @@ import {
 import {
   IncomingMessage,
   CallbackQuery,
+  BotCommand,
 } from "../../telegram/TelegramTypes.ts";
 import { AppDatastore } from "../../core/AppDatastore.ts";
 import { VisitorStatus } from "../../core/VisitorResult.ts";
 
-export const KOSMOS_INLINE_COMMANDS = [
+export const KOSMOS_COMMANDS: BotCommand[] = [
   {
-    text: "/kosmosstatus - retrieve the actual visitor status from kosmos",
-    callback_data: "/kosmosstatus",
+    command: "kosmosstatus",
+    description: "retrieve the actual visitor status from kosmos",
   },
+  { command: "kosmoson", description: "activate the threshold notification" },
   {
-    text: "/kosmoson - activate the threshold notification",
-    callback_data: "/kosmoson",
-  },
-  {
-    text: "/kosmosoff - deactivate the threshold notification",
-    callback_data: "/kosmosoff",
+    command: "kosmosoff",
+    description: "deactivate the threshold notification",
   },
 ];
+
+export const KOSMOS_INLINE_COMMANDS = KOSMOS_COMMANDS.map((
+  { command, description },
+) => ({
+  text: `/${command} - ${description}`,
+  callback_data: `/${command}`,
+}));
 
 export async function handleKosmosTelegramMessage(
   datastore: VisitorDatastore,

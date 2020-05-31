@@ -8,6 +8,8 @@ import {
   OutgoingCallbackAnswerMessage,
 } from "./TelegramTypes.ts";
 import { genUrl } from "../core/Utils.ts";
+import { KOSMOS_COMMANDS } from "../gyms/kosmos/KosmosTelegramMessageHandler.ts";
+import { BLOC_COMMANDS } from "../gyms/bloc_bouldering/BlocTelegramMessageHandler.ts";
 
 const TELEGRAM_BASE_URL = Deno.env.get("TELEGRAM_BASE_URL") ||
   "https://api.telegram.org/bot";
@@ -74,6 +76,7 @@ export function addCallbackHandler(handler: (callback: CallbackQuery) => void) {
 }
 
 export function start() {
+  registerBotCommand();
   MessageUpdateEvent.attach(_onMessageUpdate);
   MessageUpdateEvent.post({ ok: true, result: [] });
   logger.info("Telegram Bot started");
@@ -113,4 +116,32 @@ function _onMessageUpdate(messageUpdates: IncomingMessageUpdates) {
   } else {
     logger.error("Message Error | " + messageUpdates);
   }
+}
+
+function registerBotCommand() {
+  fetch(genUrl(`${TELEGRAM_URL}/setMyCommands`), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      commands: [
+        { command: "start", description: "Show commands" },
+        ...KOSMOS_COMMANDS,
+        ...BLOC_COMMANDS,
+      ],
+    }),
+  })
+    .then((response) => {
+      if (response.ok) {
+        logger.debug("registerBotCommand done");
+      } else {
+        logger.error(
+          "registerBotCommand not ok",
+          response.status,
+          response.statusText,
+        );
+      }
+    })
+    .catch((error) => logger.error("Callback answer error", error));
 }
