@@ -1,16 +1,16 @@
-import { genUrl } from '../core/Utils.ts';
-import { Evt } from '../deps.ts';
-import { BLOC_COMMANDS } from '../gyms/bloc_bouldering/BlocTelegramMessageHandler.ts';
-import { BLOC_NOLIMIT_COMMANDS } from '../gyms/bloc_nolimit/BlocNoLimitTelegramMessageHandler.ts';
-import { KOSMOS_COMMANDS } from '../gyms/kosmos/KosmosTelegramMessageHandler.ts';
-import { logger } from '../log.ts';
+import { genUrl } from "../core/Utils.ts";
+import { Evt } from "../deps.ts";
+import { BLOC_COMMANDS } from "../gyms/bloc_bouldering/BlocTelegramMessageHandler.ts";
+import { BLOC_NOLIMIT_COMMANDS } from "../gyms/bloc_nolimit/BlocNoLimitTelegramMessageHandler.ts";
+import { KOSMOS_COMMANDS } from "../gyms/kosmos/KosmosTelegramMessageHandler.ts";
+import { logger } from "../log.ts";
 import {
   CallbackQuery,
   IncomingMessage,
   IncomingMessageUpdates,
   OutgoingCallbackAnswerMessage,
   OutgoingMessage,
-} from './TelegramTypes.ts';
+} from "./TelegramTypes.ts";
 
 const TELEGRAM_BASE_URL = Deno.env.get("TELEGRAM_BASE_URL") ||
   "https://api.telegram.org/bot";

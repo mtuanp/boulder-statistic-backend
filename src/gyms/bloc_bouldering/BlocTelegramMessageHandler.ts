@@ -36,7 +36,10 @@ export async function handleBlocTelegramMessage(
   incomingMessage: IncomingMessage,
 ): Promise<void> {
   const { chat, type, botCommand } = extractBotCommand(incomingMessage);
-  if (type === "bot_command" && botCommand.startsWith("/bloc")) {
+  if (
+    type === "bot_command" && botCommand.startsWith("/bloc") &&
+    !botCommand.startsWith("/bloc_")
+  ) {
     handleBlocCommand(
       datastore,
       appDatastore,
@@ -58,7 +61,10 @@ export async function handleBlocTelegramMessageCallback(
   callbackQuery: CallbackQuery,
 ): Promise<void> {
   const { data: botCommand, from } = callbackQuery;
-  if (botCommand && botCommand.startsWith("/bloc")) {
+  if (
+    botCommand && botCommand.startsWith("/bloc") &&
+    !botCommand.startsWith("/bloc_")
+  ) {
     handleBlocCommand(
       datastore,
       appDatastore,
