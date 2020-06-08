@@ -86,37 +86,41 @@ export function start() {
 function _onMessageUpdate(messageUpdates: IncomingMessageUpdates) {
   if (messageUpdates.ok) {
     logger.debug("Message OK - start incoming message process");
-    messageUpdates.result.forEach(
-      (inMsg) => {
-        if (inMsg.message) {
-          MessageEvent.postAsyncOnceHandled(inMsg.message);
-        }
-        if (inMsg.callback_query) {
-          CallbackEvent.postAsyncOnceHandled(inMsg.callback_query);
-        }
-      },
-    );
+    messageUpdates.result.forEach((inMsg) => {
+      if (inMsg.message) {
+        MessageEvent.postAsyncOnceHandled(inMsg.message);
+      }
+      if (inMsg.callback_query) {
+        CallbackEvent.postAsyncOnceHandled(inMsg.callback_query);
+      }
+    });
     const offset = messageUpdates.result.reduce(
       (_, msg) => msg.update_id + 1,
       0,
     );
     logger.debug("offset", offset);
-    fetch(
-      genUrl(`${TELEGRAM_URL}/getUpdates`, {
-        timeout: TELEGRAM_POLL_TIMEOUT,
-        offset,
-      }),
-    )
-      .then((res) => res.json() as Promise<IncomingMessageUpdates>)
-      .then((messageUpdate) => {
-        logger.debug("incoming message done", messageUpdate);
-        MessageUpdateEvent.post(messageUpdate);
-      })
-      .then(() => logger.debug("Message update done"))
-      .catch((error) => logger.error("Message incoming update error", error));
+    _callTelegramGetUpdates(offset);
   } else {
-    logger.error("Message Error | " + messageUpdates);
+    logger.error("Message Error | ", messageUpdates);
+    _callTelegramGetUpdates();
   }
+}
+
+function _callTelegramGetUpdates(offset?: number) {
+  logger.debug("call get message update");
+  fetch(
+    genUrl(`${TELEGRAM_URL}/getUpdates`, {
+      timeout: TELEGRAM_POLL_TIMEOUT,
+      offset,
+    }),
+  )
+    .then((res) => res.json() as Promise<IncomingMessageUpdates>)
+    .then((messageUpdate) => {
+      logger.debug("incoming message done", messageUpdate);
+      MessageUpdateEvent.post(messageUpdate);
+    })
+    .then(() => logger.debug("Message update done"))
+    .catch((error) => logger.error("Message incoming update error", error));
 }
 
 function registerBotCommand() {
