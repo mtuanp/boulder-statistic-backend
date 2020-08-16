@@ -38,22 +38,20 @@ export class KosmosParser implements Parser {
       (iframeGroups && iframeGroups.length === 2) ||
       KOSMOS_BOULDERADO_FALLBACK_URL
     ) {
-      const decodedUrl =
-        iframeGroups?.length === 2
-          ? Html5Entities.decode(iframeGroups[1])
-          : KOSMOS_BOULDERADO_FALLBACK_URL;
+      const decodedUrl = iframeGroups?.length === 2
+        ? Html5Entities.decode(iframeGroups[1])
+        : KOSMOS_BOULDERADO_FALLBACK_URL;
       const counterHtmlText = await this.txtFetcher(decodedUrl);
       const freeCounterGroup = FreeCounterRegEx.exec(counterHtmlText);
       if (freeCounterGroup && freeCounterGroup.length === 2) {
         const visitorCount = +freeCounterGroup[1];
         return {
           count: visitorCount,
-          status:
-            visitorCount >= 0 && visitorCount < AlmostFullThreshold
-              ? VisitorStatus.FREE
-              : visitorCount >= FullThreshold
-              ? VisitorStatus.FULL
-              : VisitorStatus.ALMOST_FULL,
+          status: visitorCount >= 0 && visitorCount < AlmostFullThreshold
+            ? VisitorStatus.FREE
+            : visitorCount >= FullThreshold
+            ? VisitorStatus.FULL
+            : VisitorStatus.ALMOST_FULL,
         };
       }
     }

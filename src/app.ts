@@ -134,6 +134,6 @@ logger.info("App started");
 
 await Deno.signal(Deno.Signal.SIGINT);
 logger.info("Shutdown the App");
-stop()
+stop();
 logger.info("Bye Bye");
 Deno.exit(0);
