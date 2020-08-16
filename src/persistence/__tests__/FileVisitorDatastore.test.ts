@@ -56,9 +56,9 @@ Deno.test(
     const db = new FileVisitorDatastore(
       createDataPathMap("tmp/visitDatabase2"),
     );
+    await delay(100);
     await db.init();
     const lastStatus = await db.getLatestVisitorStatus(Gym.KOSMOS);
-    await delay(0);
     assertEquals(lastStatus, expectedStatusEntry);
   },
 );

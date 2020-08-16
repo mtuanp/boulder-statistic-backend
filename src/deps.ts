@@ -1,9 +1,9 @@
 // std version 0.51 === deno 1.0.0 | 0.52 === deno 1.0.1
 // deno standard library
-export * from "https://deno.land/std@0.54.0/testing/asserts.ts";
-export * as fs from "https://deno.land/std@0.54.0/fs/mod.ts";
-export * as log from "https://deno.land/std@0.54.0/log/mod.ts";
-export { LogRecord } from "https://deno.land/std@0.54.0/log/logger.ts";
+export * from "https://deno.land/std@0.65.0/testing/asserts.ts";
+export * as fs from "https://deno.land/std@0.65.0/fs/mod.ts";
+export * as log from "https://deno.land/std@0.65.0/log/mod.ts";
+export { LogRecord } from "https://deno.land/std@0.65.0/log/logger.ts";
 
 // third party library
 export { Cron } from "https://deno.land/x/cron/cron.ts";

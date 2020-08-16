@@ -13,5 +13,6 @@
     "freepercent",
     "supergroup",
     "visitorcount"
-  ]
+  ],
+  "deno.enable": true,
 }

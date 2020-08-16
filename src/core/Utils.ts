@@ -8,6 +8,7 @@ export function delay(n: number): Promise<void> {
   });
 }
 
+// deno-lint-ignore no-explicit-any
 export function genUrl(url: string, parameters?: any): string {
   const requestParameters = parameters
     ? Object.keys(parameters)

@@ -85,7 +85,7 @@ function handleBlocCommand(
   appDatastore: AppDatastore,
   botCommand: string,
   userId: number,
-  sendCallback: (text: string, inlineReplay?: any) => void,
+  sendCallback: (text: string, inlineReplay?: object) => void,
 ) {
   switch (botCommand) {
     case "/blocstatus":
@@ -168,7 +168,7 @@ function handleBlocOff(
 }
 
 function handleBlocHelp(
-  sendCallback: (text: string, inlineReplay?: any) => void,
+  sendCallback: (text: string, inlineReplay?: object) => void,
 ) {
   sendCallback("following Bloc bouldering command are available:", {
     inline_keyboard: [

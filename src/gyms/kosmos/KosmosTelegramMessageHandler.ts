@@ -82,7 +82,7 @@ function handleKosmosCommand(
   appDatastore: AppDatastore,
   botCommand: string,
   userId: number,
-  sendCallback: (text: string, inlineReplay?: any) => void,
+  sendCallback: (text: string, inlineReplay?: object) => void,
 ) {
   switch (botCommand) {
     case "/kosmosstatus":
@@ -165,7 +165,7 @@ function handleKosmosOff(
 }
 
 function handleKosmosHelp(
-  sendCallback: (text: string, inlineReplay?: any) => void,
+  sendCallback: (text: string, inlineReplay?: object) => void,
 ) {
   sendCallback("following Kosmos command are available:", {
     inline_keyboard: [

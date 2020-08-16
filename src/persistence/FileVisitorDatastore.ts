@@ -19,8 +19,9 @@ export class FileVisitorDatastore implements VisitorDatastore {
   async init() {
     const now = new Date();
     const dateString = buildDateString(now);
-    this.dataPathMap.forEach(({ path, lastUpdate }) => {
+    this.dataPathMap.forEach(({ path }, gym) => {
       const filePath = `${path}/${dateString}.json`;
+      let lastUpdate;
       fs.ensureDirSync(path);
       if (fs.existsSync(filePath)) {
         const existingContent = this._readJson(filePath);
@@ -28,6 +29,7 @@ export class FileVisitorDatastore implements VisitorDatastore {
       } else {
         lastUpdate = this._buildDefaultStatus(now);
       }
+      this.dataPathMap.set(gym, { path, lastUpdate });
     });
     logger.debug("Datastore is ready");
   }

@@ -10,11 +10,11 @@ export async function handleNewVisitorStatus(
   appDatastore: AppDatastore,
   {
     gym,
-actualVisitorStatus: {
+    actualVisitorStatus: {
       timestamp: actualTimestamp,
       visitorStatus: actualVisitorStatus,
     },
-lastVisitorStatus: {
+    lastVisitorStatus: {
       timestamp: latestTimestamp,
       visitorStatus: latestVisitorStatus,
     },

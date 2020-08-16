@@ -52,7 +52,7 @@ export type OutgoingMessage = {
   disable_web_page_preview?: boolean;
   disable_notification?: boolean;
   reply_to_message_id?: number;
-  reply_markup?: any;
+  reply_markup?: object;
 };
 
 export type OutgoingCallbackAnswerMessage = {
