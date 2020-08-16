@@ -1,18 +1,19 @@
-import { VisitorDatastore } from "../../core/VisitorDatastore.ts";
+import { AppDatastore } from "../../core/AppDatastore.ts";
 import { Gym } from "../../core/Gym.ts";
-import { statusEnumToString, extractBotCommand } from "../../core/Utils.ts";
+import { extractBotCommand, statusEnumToString } from "../../core/Utils.ts";
+import { VisitorDatastore } from "../../core/VisitorDatastore.ts";
+import { VisitorStatus } from "../../core/VisitorResult.ts";
+import { telegram } from "../../deps.ts";
 import { logger } from "../../log.ts";
 import {
-  sendMessage,
   answerCallbackQuery,
+  sendMessage,
 } from "../../telegram/TelegramBot.ts";
 import {
-  IncomingMessage,
-  CallbackQuery,
   BotCommand,
+  CallbackQuery,
+  IncomingMessage,
 } from "../../telegram/TelegramTypes.ts";
-import { AppDatastore } from "../../core/AppDatastore.ts";
-import { VisitorStatus } from "../../core/VisitorResult.ts";
 
 export const KOSMOS_COMMANDS: BotCommand[] = [
   {
@@ -82,7 +83,10 @@ function handleKosmosCommand(
   appDatastore: AppDatastore,
   botCommand: string,
   userId: number,
-  sendCallback: (text: string, inlineReplay?: object) => void,
+  sendCallback: (
+    text: string,
+    inlineReplay?: telegram.types.InlineKeyboardMarkup,
+  ) => void,
 ) {
   switch (botCommand) {
     case "/kosmosstatus":
@@ -165,7 +169,10 @@ function handleKosmosOff(
 }
 
 function handleKosmosHelp(
-  sendCallback: (text: string, inlineReplay?: object) => void,
+  sendCallback: (
+    text: string,
+    inlineReplay?: telegram.types.InlineKeyboardMarkup,
+  ) => void,
 ) {
   sendCallback("following Kosmos command are available:", {
     inline_keyboard: [

@@ -1,10 +1,10 @@
 import { AppDatastore } from "../core/AppDatastore.ts";
 import { UserNotificationSetting } from "../core/NotificationSetting.ts";
+import { gymEnumToString, statusEnumToString } from "../core/Utils.ts";
 import { VisitorEventData } from "../core/VisitorEventData.ts";
 import { VisitorStatus } from "../core/VisitorResult.ts";
+import { telegram } from "../deps.ts";
 import { sendMessage } from "../telegram/TelegramBot.ts";
-import { OutgoingMessage } from "../telegram/TelegramTypes.ts";
-import { gymEnumToString, statusEnumToString } from "../core/Utils.ts";
 
 export async function handleNewVisitorStatus(
   appDatastore: AppDatastore,
@@ -58,7 +58,7 @@ export function skipNotification(
 export function findUsersAndNotify(
   actualVisitorStatus: VisitorStatus,
   allUserNotifications: UserNotificationSetting[],
-  sendMessage: (outgoingMessage: OutgoingMessage) => void,
+  sendMessage: (outgoingMessage: telegram.types.SendMessageParameters) => void,
 ): void {
   allUserNotifications
     .filter((n) => actualVisitorStatus <= n.threshold)

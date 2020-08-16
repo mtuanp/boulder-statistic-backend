@@ -1,6 +1,6 @@
 export type User = {
   id: number;
-  is_bot: number;
+  is_bot: boolean;
   first_name: string;
 };
 
@@ -17,7 +17,7 @@ export type MessageEntity = {
 
 export type IncomingMessage = {
   message_id: number;
-  from: User;
+  from?: User;
   date: number;
   chat: Chat;
   text?: string;

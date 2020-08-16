@@ -28,6 +28,7 @@ import {
   start,
   addMessageHandler,
   addCallbackHandler,
+  stop,
 } from "./telegram/TelegramBot.ts";
 import { FileVisitorDatastore as VisitorDatastore } from "./persistence/FileVisitorDatastore.ts";
 import { FileAppDatastore as AppDatastore } from "./persistence/FileAppDatastore.ts";
@@ -133,5 +134,6 @@ logger.info("App started");
 
 await Deno.signal(Deno.Signal.SIGINT);
 logger.info("Shutdown the App");
+stop()
 logger.info("Bye Bye");
 Deno.exit(0);
