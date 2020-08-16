@@ -64,7 +64,6 @@ addMessageHandler(handleDefaultTelegramMessage);
 start();
 
 const cron = new Cron();
-cron.start();
 
 const kosmosEmitter = new KosmosVisitorLiveEmitter(
   db,
@@ -95,40 +94,22 @@ const blocNoLimitWorkingHour =
     .map((x) => +x);
 
 // cron
-cron.add(Deno.env.get("CRON") || "* * * * *", () => {
-  const date = new Date();
-  const hour = date.getHours();
-  const minutes = date.getMinutes();
-  if (minutes % EVERY_MINUTES === 0) {
-    if (
-      hour >= kosmosWorkingHour[0] &&
-      hour <= kosmosWorkingHour[1]
-    ) {
-      kosmosEmitter
-        .emitActualVisitor()
-        .then(() => logger.info("Kosmos status emitted"))
-        .catch((error) => logger.error("Kosmos error", error));
-    }
-    if (
-      hour >= blocWorkingHour[0] &&
-      hour <= blocWorkingHour[1]
-    ) {
-      blocEmitter
-        .emitActualVisitor()
-        .then(() => logger.info("Bloc bouldering status emitted"))
-        .catch((error) => logger.error("Bloc bouldering error", error));
-    }
-    if (
-      hour >= blocNoLimitWorkingHour[0] &&
-      hour <= blocNoLimitWorkingHour[1]
-    ) {
-      blocNoLimitEmitter
-        .emitActualVisitor()
-        .then(() => logger.info("Bloc climbing status emitted"))
-        .catch((error) => logger.error("Bloc climbing error", error));
-    }
-  }
+cron.add(Deno.env.get("CRON") || "*/5 10-22 * * *", () => {
+  kosmosEmitter
+    .emitActualVisitor()
+    .then(() => logger.info("Kosmos status emitted"))
+    .catch((error) => logger.error("Kosmos error", error));
+  blocEmitter
+    .emitActualVisitor()
+    .then(() => logger.info("Bloc bouldering status emitted"))
+    .catch((error) => logger.error("Bloc bouldering error", error));
+  blocNoLimitEmitter
+    .emitActualVisitor()
+    .then(() => logger.info("Bloc climbing status emitted"))
+    .catch((error) => logger.error("Bloc climbing error", error));
 });
+
+cron.start();
 
 logger.info("App started");
 
